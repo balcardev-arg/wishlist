@@ -9,9 +9,21 @@ import SwiftUI
 
 @main
 struct WishListApp: App {
+    init(){
+        UINavigationBar.appearance().backgroundColor = .systemBlue
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ZStack {
+                MyBoardView()
+                
+                GeometryReader { reader in
+                    Color.blue
+                        .frame(height: reader.safeAreaInsets.top, alignment: .top)
+                        .ignoresSafeArea()
+                }
+            }
         }
     }
 }
