@@ -9,7 +9,9 @@ import SwiftUI
 
 struct MyBoardView: View {
     
-    private let items = [
+    @State private var items: [FakeItem] = []
+   
+    private let fullItems = [
         FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
         FakeItem(id: 2, name: "Sillon", precio: 2000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
         FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
@@ -17,6 +19,7 @@ struct MyBoardView: View {
     ]
     
     var body: some View {
+        
         NavigationView {
             List(items) { item in
                 NavigationLink(destination: Text(item.description)) {
@@ -29,15 +32,30 @@ struct MyBoardView: View {
                         Text(item.description)
                     }
                 }
-            }.listStyle(.grouped)
+            }.overlay(alignment: .center){
+                if items.count == 0 {
+                    Text("There are not items yet. \n Add items to start a wish list")
+                        .fontWeight(.black)
+                        .multilineTextAlignment(.center)
+                }
+                
+            }
+                .listStyle(.grouped)
                 .navigationTitle("My board")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {}) {
+                        Button(action: {
+                            if items.count == 0 {
+                                items = fullItems
+                            }else {
+                                self.items = []
+                            }
+                        }) {
                             Image(systemName: "plus").foregroundColor(.black)
                         }
                     }
                 }
+            
         }.accentColor(.black)
     }
 }
