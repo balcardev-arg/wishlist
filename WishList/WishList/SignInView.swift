@@ -15,7 +15,6 @@ struct SignInView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showForgotPasswordView: Bool = false
-    @State private var showSingUpView: Bool = false
     @State private var isPasswordSecure: Bool = true
     
     
