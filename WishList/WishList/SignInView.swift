@@ -7,16 +7,12 @@
 
 import SwiftUI
 
-
-
 struct SignInView: View {
-    
     
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showForgotPasswordView: Bool = false
     @State private var isPasswordSecure: Bool = true
-    
     
     var body: some View {
         NavigationView(){
@@ -27,7 +23,6 @@ struct SignInView: View {
                     .background(.gray)
                     .cornerRadius(90)
                     .shadow(radius: 2)
-                    
                 
                 Text("Email")
                     .foregroundColor(.blue)
@@ -36,7 +31,6 @@ struct SignInView: View {
                 TextField("Email", text: $email)
                     .frame(width: 350, height: 50)
                     .background(Color.black.opacity(0.00))
-                
                 
                 Text("Password")
                     .foregroundColor(.blue)
@@ -73,7 +67,6 @@ struct SignInView: View {
                     .cornerRadius(10)
                     .disabled(!validFields)
                 
-                
                 Button("Forgot Password?"){
                     showForgotPasswordView = true
                     //componente button
@@ -84,18 +77,13 @@ struct SignInView: View {
                     }
                 }
                 
-                
                 NavigationLink(destination: {Text("Pantalla")}){
                 Text("Sign up")
                 }
-                
             }
             .padding()
         }
-        
-        
     }
-    
 }
 
 struct ContentView_Previews: PreviewProvider {
@@ -104,16 +92,4 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-extension String {
-    
-    func isValidEmailAddress() -> Bool {
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        
-        let emailValidation = NSPredicate(format:"SELF MATCHES[c] %@", emailRegEx)
-        return emailValidation.evaluate(with: self)
-    }
-    func isPassword() -> Bool {
-        return self.count >= 6
-    }
-}
 
