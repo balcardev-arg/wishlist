@@ -9,20 +9,16 @@ import SwiftUI
 
 @main
 struct WishListApp: App {
+    @State var email: String = ""
     init(){
         UINavigationBar.appearance().backgroundColor = .systemBlue
     }
     
     var body: some Scene {
         WindowGroup {
-            ZStack {
-                MyBoardView()
+            SignInView()
+            if email.isValidEmailAddress(){
                 
-                GeometryReader { reader in
-                    Color.blue
-                        .frame(height: reader.safeAreaInsets.top, alignment: .top)
-                        .ignoresSafeArea()
-                }
             }
         }
     }
