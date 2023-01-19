@@ -13,3 +13,9 @@ struct FakeItem : Identifiable {
     var precio : Int
     var description : String
 }
+
+extension FakeItem: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.id == rhs.id
+    }
+}

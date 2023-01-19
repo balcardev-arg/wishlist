@@ -11,18 +11,18 @@ struct MyBoardView: View {
     
     @State private var items: [FakeItem] = []
    
-    private let fullItems = [
-        FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 2, name: "Sillon", precio: 2000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 4, name: "Cafetera", precio: 4000, description: "Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
+    @State private var fullItems = [
+        FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "11111Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 2, name: "Sillon", precio: 2000, description: "22222Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "333333Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 4, name: "Cafetera", precio: 4000, description: "44444Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
     ]
     
     var body: some View {
         
         NavigationView {
             List(items) { item in
-                NavigationLink(destination: Text(item.description)) {
+                NavigationLink(destination: ItemDetailsScreenUI(items: $items, item: item)) {
                     HStack {
                         Image(systemName: "photo")
                             .resizable()
@@ -30,6 +30,7 @@ struct MyBoardView: View {
                             .padding(10)
                             .cornerRadius(20)
                         Text(item.description)
+                            .lineLimit(3)
                     }
                 }
             }.overlay(alignment: .center){
@@ -38,10 +39,10 @@ struct MyBoardView: View {
                         .fontWeight(.black)
                         .multilineTextAlignment(.center)
                 }
-                
             }
                 .listStyle(.grouped)
                 .navigationTitle("My board")
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
