@@ -15,11 +15,11 @@ struct TabBar: View {
                 Text("My Board")
             }
             
-            Text("Friends").tabItem {
-                Group{
-                    Image(systemName: "person.2.fill")
-                    Text("Friends")
-                }
+            
+            
+            FriendsView().tabItem {
+                Image(systemName: "person.2.fill")
+                Text("Friends")
             }
             
             Text("Menú").tabItem {
