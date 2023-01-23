@@ -16,7 +16,7 @@ struct WishListApp: App {
     var body: some Scene {
         WindowGroup {
             ZStack {
-                MyBoardView()
+                FriendsView()
                 
                 GeometryReader { reader in
                     Color.blue
