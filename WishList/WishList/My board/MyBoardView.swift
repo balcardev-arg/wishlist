@@ -15,14 +15,18 @@ struct MyBoardView: View {
         FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "11111Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
         FakeItem(id: 2, name: "Sillon", precio: 2000, description: "22222Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
         FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "333333Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 4, name: "Cafetera", precio: 4000, description: "44444Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
+        FakeItem(id: 4, name: "Cafetera", precio: 4000, description: "44444Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 5, name: "Pava electrica", precio: 1000, description: "111112Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 6, name: "Sillon", precio: 2000, description: "222223Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 7, name: "Smart TV", precio: 3000, description: "3333334Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+        FakeItem(id: 8, name: "Cafetera", precio: 4000, description: "444445Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
     ]
     
     var body: some View {
         
         NavigationView {
             List(items) { item in
-                NavigationLink(destination: ItemDetailsScreenUI(items: $items, item: item)) {
+                NavigationLink(destination: ItemDetailsScreen(items: $items, item: item)) {
                     HStack {
                         Image(systemName: "photo")
                             .resizable()

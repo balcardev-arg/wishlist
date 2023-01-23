@@ -20,6 +20,7 @@
 		CD4A23292979BFCA00CB665F /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A23282979BFCA00CB665F /* StringExtension.swift */; };
 		CD4A232E2979CF2600CB665F /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A232D2979CF2600CB665F /* FriendsView.swift */; };
 		CD4A2331297EC6A600CB665F /* FakeFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A2330297EC6A600CB665F /* FakeFriend.swift */; };
+		CD6462B9297EEE9400246B3B /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6462B8297EEE9400246B3B /* TabBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		CD4A23282979BFCA00CB665F /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CD4A232D2979CF2600CB665F /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
 		CD4A2330297EC6A600CB665F /* FakeFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeFriend.swift; sourceTree = "<group>"; };
+		CD6462B8297EEE9400246B3B /* TabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				CD4A23272979BFB900CB665F /* Utils */,
 				97895D572976FFB7003E2878 /* Info.plist */,
 				97895D2B2975943C003E2878 /* WishListApp.swift */,
+				CD6462B8297EEE9400246B3B /* TabBar.swift */,
 				CD4A232F297EC67600CB665F /* Friends */,
 				CD4A232C2979CBBE00CB665F /* My board */,
 				CD4A232529770E8800CB665F /* SignInView.swift */,
@@ -301,6 +304,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD6462B9297EEE9400246B3B /* TabBar.swift in Sources */,
 				97895D2E2975943C003E2878 /* MyBoardView.swift in Sources */,
 				97895D562975C762003E2878 /* FakeItem.swift in Sources */,
 				CD4A2331297EC6A600CB665F /* FakeFriend.swift in Sources */,
