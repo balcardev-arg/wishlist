@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ItemDetailsScreenUI: View {
+struct ItemDetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
