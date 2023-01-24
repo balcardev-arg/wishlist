@@ -1,5 +1,5 @@
 //
-//  ItemDetailsScreenUI.swift
+//  ItemDetailsScreen.swift
 //  WishList
 //
 //  Created by Layla Cisneros on 18/01/2023.
