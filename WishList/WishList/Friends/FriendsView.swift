@@ -9,6 +9,8 @@ import SwiftUI
 
 struct FriendsView: View {
     
+    @State private var isPresentingModal = false
+    
     @State private var friends: [FakeFriend] = []
     private let fullFriends: [FakeFriend] = [
         FakeFriend(id: "1", name: "Gian El hombre", urlImage: ""),
@@ -42,16 +44,14 @@ struct FriendsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        if friends.count == 0 {
-                            friends = fullFriends
-                        }else {
-                            friends = []
-                        }
+                        isPresentingModal = true
                     }) {
                         Image(systemName: "magnifyingglass").foregroundColor(.black)
                     }
                 }
             }
+        }.sheet(isPresented: $isPresentingModal) {
+            SearchFriendsScreen()
             
         }
     }
