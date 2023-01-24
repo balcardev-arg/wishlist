@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MyBoardView: View {
     
+    @State private var isPresented = false
+    
     @State private var items: [FakeItem] = []
    
     private let fullItems = [
@@ -40,18 +42,20 @@ struct MyBoardView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            if items.count == 0 {
-                                items = fullItems
-                            }else {
-                                self.items = []
-                            }
+                            isPresented = true
                         }) {
                             Image(systemName: "plus").foregroundColor(.black)
                         }
                     }
+                }.sheet(isPresented: $isPresented) {
+                    CreateItemScreen()
                 }
             
         }.accentColor(.black)
+    }
+    
+    private func presentCreateView() {
+        isPresented = true
     }
 }
 

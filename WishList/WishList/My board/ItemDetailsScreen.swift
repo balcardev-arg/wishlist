@@ -1,5 +1,5 @@
 //
-//  ItemDetailsScreenUI.swift
+//  ItemDetailsScreen.swift
 //  WishList
 //
 //  Created by Layla Cisneros on 18/01/2023.
@@ -26,8 +26,9 @@ struct ItemDetailsScreen: View {
                 Button(action: {
                     items = items.filter{$0 != item}
                     presentationMode.wrappedValue.dismiss()
-                }, label: { Image(systemName: "trash.fill") })
-                
+                }){
+                    Image(systemName: "trash.fill")   
+                }
             }
         }.overlay(alignment: .bottom){
             Button(action: {
@@ -43,9 +44,12 @@ struct ItemDetailsScreen: View {
         }
     }
 }
-//
-//struct ItemDetailsScreenUIPreviews: PreviewProvider {
-//    static var previews: some View {
-//        ItemDetailsScreenUI()
-//    }
-//}
+
+struct ItemDetailsScreenUIPreviews: PreviewProvider {
+    @State static var fakeList = [FakeItem]()
+    @State static var fakeItem = FakeItem(id: 1, name: "name", precio: 100, description: "asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdas")
+    
+    static var previews: some View {
+        ItemDetailsScreen(items: $fakeList, item: fakeItem)
+    }
+}
