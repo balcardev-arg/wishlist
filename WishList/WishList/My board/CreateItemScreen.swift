@@ -23,7 +23,7 @@ struct CreateItemScreen: View {
                 .padding()
                 .background(Color.black.opacity(0.05))
                 .frame(width: 375)
-                
+            
             Text("Description")
                 .fontWeight(.bold)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -44,20 +44,21 @@ struct CreateItemScreen: View {
                 .frame(width: 200, height: 200)
                 .padding()
             
-            Button(action: {}, label: { Text("Change Image").frame(maxWidth: .infinity, alignment: .center)
-                .padding(10)
-            })
+            Button(action: {}){
+                Text("Change Image").frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
+            }
             
             Spacer()
-        
-            Button(action: {}, label: {
-                        Text("Create")
-                            .foregroundColor(.white)
-                            .frame(width: 350, height: 40)
-                            .background(.blue)
-                            .font(.body)
-                            .padding()
-                    })
+            
+            Button(action: {}){
+                Text("Create")
+                    .foregroundColor(.white)
+                    .frame(width: 350, height: 40)
+                    .background(.blue)
+                    .font(.body)
+                    .padding()
+            }
         }
     }
 }
