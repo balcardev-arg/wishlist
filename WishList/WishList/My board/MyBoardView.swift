@@ -57,7 +57,9 @@ struct MyBoardView: View {
                             Image(systemName: "plus").foregroundColor(.black)
                         }
                     }
-                }.sheet(isPresented : $isPresented, onDismiss: {isPresented = false}, content: { CreateItemScreen()})
+                }.sheet(isPresented: $isPresented) {
+                    CreateItemScreen()
+                }
             
         }.accentColor(.black)
     }
