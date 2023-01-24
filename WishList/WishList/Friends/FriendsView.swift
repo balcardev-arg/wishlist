@@ -9,16 +9,16 @@ import SwiftUI
 
 struct FriendsView: View {
     
-    private var friends: [FakeFriend] = [
-        FakeFriend(id: "1", name: "Gian El homoe", urlImage: ""),
-        FakeFriend(id: "2", name: "Andres el k-po", urlImage: ""),
+    @State private var friends: [FakeFriend] = []
+    private let fullFriends: [FakeFriend] = [
+        FakeFriend(id: "1", name: "Gian El hombre", urlImage: ""),
+        FakeFriend(id: "2", name: "Andres el come hombre", urlImage: ""),
         FakeFriend(id: "3", name: "Layla", urlImage: ""),
         FakeFriend(id: "4", name: "Tu vieja", urlImage: "")
     ]
     
     var body: some View {
         NavigationView {
-            
             List(friends, id: \.id) { friend in
                 NavigationLink(destination: {Text("Friend Profile")}){
                     HStack {
@@ -31,10 +31,22 @@ struct FriendsView: View {
                             .lineLimit(3)
                     }
                 }
-            }.toolbar {
+                //overlay se sobre escribe arriba
+            } .overlay{
+                if friends.count == 0 {
+                    Text("There are no friends yet. \n Search people and add them as friends to see some friends here.")
+                        .fontWeight(.black)
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        
+                        if friends.count == 0 {
+                            friends = fullFriends
+                        }else {
+                            friends = []
+                        }
                     }) {
                         Image(systemName: "magnifyingglass").foregroundColor(.black)
                     }
