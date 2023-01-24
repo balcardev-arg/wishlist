@@ -26,17 +26,7 @@ struct MyBoardView: View {
         
         NavigationView {
             List(items) { item in
-                NavigationLink(destination: ItemDetailsScreen(items: $items, item: item)) {
-                    HStack {
-                        Image(systemName: "photo")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .padding(10)
-                            .cornerRadius(20)
-                        Text(item.description)
-                            .lineLimit(3)
-                    }
-                }
+                ItemCell(items: $items, item: item)
             }.overlay(alignment: .center){
                 if items.count == 0 {
                     Text("There are not items yet. \n Add items to start a wish list")

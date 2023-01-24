@@ -11,4 +11,11 @@ struct FakeFriend: Identifiable {
     let id: String
     let name: String
     let urlImage: String
+    var isFriend: Bool
 }
+extension FakeFriend: Equatable {
+    static func == (lhs: Self, rhs: Self) -> Bool {
+        return lhs.id == rhs.id
+    }
+}
+
