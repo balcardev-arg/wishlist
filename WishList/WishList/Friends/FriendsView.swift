@@ -12,19 +12,20 @@ struct FriendsView: View {
     @State private var isPresentingModal = false
     
     @State private var friends: [FakeFriend] = []
+    
     private let fullFriends: [FakeFriend] = [
-        FakeFriend(id: "1", name: "Gian El hombre", urlImage: ""),
-        FakeFriend(id: "2", name: "Andres el come hombre", urlImage: ""),
-        FakeFriend(id: "3", name: "Layla", urlImage: ""),
-        FakeFriend(id: "4", name: "Tu vieja", urlImage: "")
+        FakeFriend(id: "1", name: "Gian El hombre", urlImage: "", isFriend: false),
+        FakeFriend(id: "2", name: "Andres el come hombre", urlImage: "", isFriend: false),
+        FakeFriend(id: "3", name: "Layla", urlImage: "", isFriend: false),
+        FakeFriend(id: "4", name: "Tu vieja", urlImage: "", isFriend: false)
     ]
     
     var body: some View {
         NavigationView {
             List(friends, id: \.id) { friend in
-                NavigationLink(destination: {Text("Friend Profile")}){
+                NavigationLink(destination: FriendBoardScreen(friends: $friends,friend: friend)){
                     HStack {
-                        Image(systemName: "photo")
+                        Image(systemName: "person.fill")
                             .resizable()
                             .frame(width: 40, height: 40)
                             .padding(10)
@@ -46,7 +47,7 @@ struct FriendsView: View {
                     Button(action: {
                         isPresentingModal = true
                     }) {
-                        Image(systemName: "magnifyingglass").foregroundColor(.black)
+                        Image(systemName: "magnifyingglass").foregroundColor(.white)
                     }
                 }
             }
