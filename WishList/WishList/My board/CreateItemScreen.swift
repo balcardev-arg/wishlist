@@ -42,8 +42,9 @@ struct CreateItemScreen: View {
             Image(systemName: "photo.circle.fill")
                 .resizable()
                 .frame(width: 200, height: 200)
+                .padding()
             
-            Button(action: {}, label: { Text("Change Image").frame(maxWidth: .infinity, alignment: .leading)
+            Button(action: {}, label: { Text("Change Image").frame(maxWidth: .infinity, alignment: .center)
                 .padding(10)
             })
             

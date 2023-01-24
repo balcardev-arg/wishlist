@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		977B2151297F03D700F0A629 /* ItemCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977B2150297F03D700F0A629 /* ItemCellView.swift */; };
 		97895D2C2975943C003E2878 /* WishListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97895D2B2975943C003E2878 /* WishListApp.swift */; };
 		97895D2E2975943C003E2878 /* MyBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97895D2D2975943C003E2878 /* MyBoardView.swift */; };
 		97895D302975943E003E2878 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97895D2F2975943E003E2878 /* Assets.xcassets */; };
@@ -43,7 +42,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		977B2150297F03D700F0A629 /* ItemCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemCellView.swift; sourceTree = "<group>"; };
 		97895D282975943C003E2878 /* WishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97895D2B2975943C003E2878 /* WishListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListApp.swift; sourceTree = "<group>"; };
 		97895D2D2975943C003E2878 /* MyBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBoardView.swift; sourceTree = "<group>"; };
@@ -163,7 +161,6 @@
 			isa = PBXGroup;
 			children = (
 				97895D2D2975943C003E2878 /* MyBoardView.swift */,
-				977B2150297F03D700F0A629 /* ItemCellView.swift */,
 				97895D552975C762003E2878 /* FakeItem.swift */,
 				97895D5B29782509003E2878 /* ItemDetailsScreen.swift */,
 				97D0551F297EF27000EE6297 /* CreateItemScreen.swift */,
@@ -320,7 +317,6 @@
 				CD4A232629770E8800CB665F /* SignInView.swift in Sources */,
 				97895D5C29782509003E2878 /* ItemDetailsScreen.swift in Sources */,
 				97895D2C2975943C003E2878 /* WishListApp.swift in Sources */,
-				977B2151297F03D700F0A629 /* ItemCellView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
