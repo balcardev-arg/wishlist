@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		977B21542980691300F0A629 /* SearchFriendsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977B2152298029BC00F0A629 /* SearchFriendsScreen.swift */; };
+		977B215829818CF900F0A629 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977B215729818CF900F0A629 /* SignUpView.swift */; };
 		97895D2C2975943C003E2878 /* WishListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97895D2B2975943C003E2878 /* WishListApp.swift */; };
 		97895D2E2975943C003E2878 /* MyBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97895D2D2975943C003E2878 /* MyBoardView.swift */; };
 		97895D302975943E003E2878 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97895D2F2975943E003E2878 /* Assets.xcassets */; };
@@ -46,6 +47,7 @@
 
 /* Begin PBXFileReference section */
 		977B2152298029BC00F0A629 /* SearchFriendsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendsScreen.swift; sourceTree = "<group>"; };
+		977B215729818CF900F0A629 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		97895D282975943C003E2878 /* WishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		97895D2B2975943C003E2878 /* WishListApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListApp.swift; sourceTree = "<group>"; };
 		97895D2D2975943C003E2878 /* MyBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBoardView.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				CD4A232F297EC67600CB665F /* Friends */,
 				CD4A232C2979CBBE00CB665F /* My board */,
 				CD4A232529770E8800CB665F /* SignInView.swift */,
+				977B215729818CF900F0A629 /* SignUpView.swift */,
 				97895D2F2975943E003E2878 /* Assets.xcassets */,
 				97895D312975943E003E2878 /* Preview Content */,
 			);
@@ -325,6 +328,7 @@
 				CD42014929806DEE006BBDE8 /* FriendBoardScreen.swift in Sources */,
 				97D05520297EF27000EE6297 /* CreateItemScreen.swift in Sources */,
 				CD4A232629770E8800CB665F /* SignInView.swift in Sources */,
+				977B215829818CF900F0A629 /* SignUpView.swift in Sources */,
 				CD42014729806DD3006BBDE8 /* ItemCell.swift in Sources */,
 				977B21542980691300F0A629 /* SearchFriendsScreen.swift in Sources */,
 				97895D5C29782509003E2878 /* ItemDetailsScreen.swift in Sources */,
