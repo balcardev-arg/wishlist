@@ -16,6 +16,7 @@ struct SignUpView: View {
     
     var body: some View {
         VStack (alignment: .leading, spacing: 10) {
+            Spacer()
             Text("Profile picture")
                 .fontWeight(.black)
             
@@ -25,33 +26,44 @@ struct SignUpView: View {
             
             Text("Email")
             
-            TextField("name@example.com", text: $email)
+            TextField("Name@example.com", text: $email)
                 .padding()
                 .background(Color.black.opacity(0.05))
-                .frame(width: 375)
+                .frame(width: 380)
             
             Text("Password")
             
-            SecureField("password", text: $password)
-                .padding()
-                .background(Color.black.opacity(0.05))
-                .frame(width: 375)
-            
+            HStack (spacing: -30) {
+                SecureField("Password", text: $password)
+                    .padding()
+                    .background(Color.black.opacity(0.05))
+                    .frame(width: 380)
+                
+                Button (action: {}) {
+                    Image(systemName: "eye")
+                        .foregroundColor(.gray)
+                }
+            }
             Text("Password Confirmation")
-            
-            SecureField("name@example.com", text: $passwordConfirmation)
-                .padding()
-                .background(Color.black.opacity(0.05))
-                .frame(width: 375)
-            
-            
-            VStack (alignment: .leading) {
+            HStack (spacing: -30) {
+                SecureField("Password confirmation", text: $password)
+                    .padding()
+                    .background(Color.black.opacity(0.05))
+                    .frame(width: 380)
+                
+                Button (action: {}) {
+                    Image(systemName: "eye")
+                        .foregroundColor(.gray)
+                }
+            }
+            VStack (alignment: .leading, spacing: 10){
+                
                 Text("Name")
                 
                 TextField("Lay", text: $name)
                     .padding()
                     .background(Color.black.opacity(0.05))
-                    .frame(width: 375)
+                    .frame(width: 380)
                 
                 Spacer()
                 
@@ -60,14 +72,13 @@ struct SignUpView: View {
                         .foregroundColor(.white)
                         .frame(width: 350, height: 40)
                         .background(.blue)
-                        .font(.body)
                         .padding()
                 }
             }
             
-            
-        }.padding()
+        }
     }
+
 }
 
 struct SignUpScreen_Previews: PreviewProvider {
