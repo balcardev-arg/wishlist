@@ -77,8 +77,8 @@ struct SignInView: View {
                     }
                 }
                 
-                NavigationLink(destination: {Text("Pantalla")}){
-                Text("Sign up")
+                NavigationLink(destination: SignUpView()){
+                    Text("Sign up")
                 }
             }
             .padding()
