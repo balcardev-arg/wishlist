@@ -21,6 +21,7 @@
 		97D05520297EF27000EE6297 /* CreateItemScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0551F297EF27000EE6297 /* CreateItemScreen.swift */; };
 		CD42014729806DD3006BBDE8 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014629806DD3006BBDE8 /* ItemCell.swift */; };
 		CD42014929806DEE006BBDE8 /* FriendBoardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014829806DEE006BBDE8 /* FriendBoardScreen.swift */; };
+		CD42014B2981550D006BBDE8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014A2981550D006BBDE8 /* ProfileView.swift */; };
 		CD4A232629770E8800CB665F /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A232529770E8800CB665F /* SignInView.swift */; };
 		CD4A23292979BFCA00CB665F /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A23282979BFCA00CB665F /* StringExtension.swift */; };
 		CD4A232E2979CF2600CB665F /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A232D2979CF2600CB665F /* FriendsView.swift */; };
@@ -64,6 +65,7 @@
 		97D0551F297EF27000EE6297 /* CreateItemScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemScreen.swift; sourceTree = "<group>"; };
 		CD42014629806DD3006BBDE8 /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
 		CD42014829806DEE006BBDE8 /* FriendBoardScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendBoardScreen.swift; sourceTree = "<group>"; };
+		CD42014A2981550D006BBDE8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		CD4A232529770E8800CB665F /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		CD4A23282979BFCA00CB665F /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CD4A232D2979CF2600CB665F /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
@@ -185,6 +187,7 @@
 				977B2152298029BC00F0A629 /* SearchFriendsScreen.swift */,
 				CD4A232D2979CF2600CB665F /* FriendsView.swift */,
 				CD4A2330297EC6A600CB665F /* FakeFriend.swift */,
+				CD42014A2981550D006BBDE8 /* ProfileView.swift */,
 			);
 			path = Friends;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				CD6462B9297EEE9400246B3B /* TabBar.swift in Sources */,
 				97895D2E2975943C003E2878 /* MyBoardView.swift in Sources */,
 				97895D562975C762003E2878 /* FakeItem.swift in Sources */,
+				CD42014B2981550D006BBDE8 /* ProfileView.swift in Sources */,
 				CD4A2331297EC6A600CB665F /* FakeFriend.swift in Sources */,
 				CD4A232E2979CF2600CB665F /* FriendsView.swift in Sources */,
 				CD4A23292979BFCA00CB665F /* StringExtension.swift in Sources */,
