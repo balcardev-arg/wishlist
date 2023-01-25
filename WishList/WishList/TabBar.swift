@@ -22,7 +22,7 @@ struct TabBar: View {
                 Text("Friends")
             }
             
-            Text("Menú").tabItem {
+            ProfileView().tabItem {
                 Image(systemName: "list.bullet")
                 Text("Menu")
                 
