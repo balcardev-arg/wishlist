@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ItemCell: View {
-    @Binding var items: [FakeItem]
-    var item: FakeItem
+    @Binding var items: [Item]
+    var item: Item
     var body: some View {
         NavigationLink(destination: ItemDetailsScreen(items: $items, item: item)) {
             HStack {
@@ -26,8 +26,8 @@ struct ItemCell: View {
 }
 
 struct ItemCell_Previews: PreviewProvider {
-    @State static var fakeItems: [FakeItem] = []
+    @State static var items: [Item] = []
     static var previews: some View {
-        ItemCell(items: $fakeItems, item: FakeItem(id: 1, name: "", precio: 100, description: "Description"))
+        ItemCell(items: $items, item: Item(id: "1", url: "", imageUrl: "", author: "", description: ""))
     }
 }
