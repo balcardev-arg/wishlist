@@ -9,10 +9,11 @@ import SwiftUI
 
 struct FriendBoardScreen: View {
     
-    @State private var friendItems: [FakeItem] = [
-        FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "11111Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 2, name: "Sillon", precio: 2000, description: "22222Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "333333Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
+    @State private var friendItems: [Item] = [
+        Item(id: "1", url: "www...", imageUrl: "perrito", author: "Andres", description: ""),
+        Item(id: "2", url: "www...", imageUrl: "michi", author: "Gian", description: "www..."),
+        Item(id: "3", url: "", imageUrl: "mango", author: "Lay", description: "")
+        
     ]
     @Binding var friends: [FakeFriend]
     @State var friend: FakeFriend

@@ -11,8 +11,8 @@ struct ItemDetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @Binding var items: [FakeItem]
-    let item: FakeItem
+    @Binding var items: [Item]
+    let item: Item
     
     var body: some View {
         ScrollView {
@@ -46,8 +46,8 @@ struct ItemDetailsScreen: View {
 }
 
 struct ItemDetailsScreenUIPreviews: PreviewProvider {
-    @State static var fakeList = [FakeItem]()
-    @State static var fakeItem = FakeItem(id: 1, name: "name", precio: 100, description: "asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdas")
+    @State static var fakeList = [Item]()
+    @State static var fakeItem = Item(id:"1", url:"www... ", imageUrl: "michi", author: "Lay", description: "michiLay")
     
     static var previews: some View {
         ItemDetailsScreen(items: $fakeList, item: fakeItem)
