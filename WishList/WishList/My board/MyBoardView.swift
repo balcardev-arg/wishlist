@@ -31,20 +31,20 @@ struct MyBoardView: View {
                         .multilineTextAlignment(.center)
                 }
             }
-                .listStyle(.grouped)
-                .navigationTitle("My board")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            isPresented = true
-                        }) {
-                            Image(systemName: "plus").foregroundColor(.black)
-                        }
+            .listStyle(.grouped)
+            .navigationTitle("My board")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isPresented = true
+                    }) {
+                        Image(systemName: "plus").foregroundColor(.black)
                     }
-                }.sheet(isPresented: $isPresented) {
-                    CreateItemScreen()
                 }
+            }.sheet(isPresented: $isPresented) {
+                CreateItemScreen()
+            }
             
         }.accentColor(.black)
     }

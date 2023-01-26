@@ -34,20 +34,28 @@ struct FriendBoardScreen: View {
                 }
                 List(friendItems) { item in
                     ItemCell(items: $friendItems, item: item)
+                }.overlay {
+                    if (friendItems.count == 0) {
+                        Text("This person has no items yet!")
+                            .fontWeight(.black)
+                            .multilineTextAlignment(.center)
+                    }
                 }
             }.background(.gray.opacity(0.2))
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button(action: {
-                        friend.isFriend.toggle()
-                    }){
-                        Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
-                    }
-                
+            
+            
+        }.accentColor(.black)
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button(action: {
+                    friend.isFriend = !friend.isFriend
+                }){
+                    Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
                 }
+            
             }
-            .accentColor(.black)
         }
+        .accentColor(.black)
     }
     
 }
