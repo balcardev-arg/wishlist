@@ -11,9 +11,9 @@ struct FriendsView: View {
     
     @State private var isPresentingModal = false
     
-    @State private var friends: [FakeFriend] = []
+    private let fullFriends: [FakeFriend] = []
     
-    private let fullFriends: [FakeFriend] = [
+    @State private var friends: [FakeFriend] = [
         FakeFriend(id: "1", name: "Gian El hombre", urlImage: "", isFriend: false),
         FakeFriend(id: "2", name: "Andres el come hombre", urlImage: "", isFriend: false),
         FakeFriend(id: "3", name: "Layla", urlImage: "", isFriend: false),

@@ -9,11 +9,13 @@ import SwiftUI
 
 struct FriendBoardScreen: View {
     
-    @State private var friendItems: [FakeItem] = [
-        FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "11111Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 2, name: "Sillon", precio: 2000, description: "22222Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
-        FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "333333Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
-    ]
+//    @State private var friendItems: [FakeItem] = [
+//        FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "11111Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+//        FakeItem(id: 2, name: "Sillon", precio: 2000, description: "22222Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
+//        FakeItem(id: 3, name: "Smart TV", precio: 3000, description: "333333Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description")
+//    ]
+    
+    @State private var friendItems: [FakeItem] = []
     @Binding var friends: [FakeFriend]
     @State var friend: FakeFriend
     
@@ -33,20 +35,23 @@ struct FriendBoardScreen: View {
                 }
                 List(friendItems) { item in
                     ItemCell(items: $friendItems, item: item)
+                 
                 }
             }.background(.gray.opacity(0.2))
-            .toolbar {
-                ToolbarItem(placement: .automatic) {
-                    Button(action: {
-                        friend.isFriend.toggle()
-                    }){
-                        Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
-                    }
-                
+            
+            
+        }.accentColor(.black)
+        .toolbar {
+            ToolbarItem(placement: .automatic) {
+                Button(action: {
+                    friend.isFriend = !friend.isFriend
+                }){
+                    Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
                 }
+            
             }
-            .accentColor(.black)
         }
+        .accentColor(.black)
     }
     
 }
