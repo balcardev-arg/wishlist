@@ -42,7 +42,8 @@ struct MyBoardView: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            isPresented = true
+                            items = fullItems
+//                            isPresented = true
                         }) {
                             Image(systemName: "plus").foregroundColor(.black)
                         }

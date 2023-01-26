@@ -35,7 +35,12 @@ struct FriendBoardScreen: View {
                 }
                 List(friendItems) { item in
                     ItemCell(items: $friendItems, item: item)
-                 
+                }.overlay {
+                    if (friendItems.count == 0) {
+                        Text("This person has no items yet!")
+                            .fontWeight(.black)
+                            .multilineTextAlignment(.center)
+                    }
                 }
             }.background(.gray.opacity(0.2))
             
