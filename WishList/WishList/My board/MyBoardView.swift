@@ -12,7 +12,7 @@ struct MyBoardView: View {
     @State private var isPresented = false
     
     @State private var items: [FakeItem] = []
-   
+    
     private let fullItems = [
         FakeItem(id: 1, name: "Pava electrica", precio: 1000, description: "11111Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
         FakeItem(id: 2, name: "Sillon", precio: 2000, description: "22222Description of the product. Should have 3 lines and an elipsis at the end if it is too long like this sample description"),
@@ -36,21 +36,20 @@ struct MyBoardView: View {
                         .multilineTextAlignment(.center)
                 }
             }
-                .listStyle(.grouped)
-                .navigationTitle("My board")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: {
-                            items = fullItems
-//                            isPresented = true
-                        }) {
-                            Image(systemName: "plus").foregroundColor(.black)
-                        }
+            .listStyle(.grouped)
+            .navigationTitle("My board")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        isPresented = true
+                    }) {
+                        Image(systemName: "plus").foregroundColor(.black)
                     }
-                }.sheet(isPresented: $isPresented) {
-                    CreateItemScreen()
                 }
+            }.sheet(isPresented: $isPresented) {
+                CreateItemScreen()
+            }
             
         }.accentColor(.black)
     }
