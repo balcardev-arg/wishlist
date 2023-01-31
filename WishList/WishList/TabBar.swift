@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct TabBar: View {
+    
+    @EnvironmentObject var credentialsManager: CredentialsManager
+    
     var body: some View {
         TabView {
             MyBoardView().tabItem {
@@ -25,8 +28,7 @@ struct TabBar: View {
             ProfileView().tabItem {
                 Image(systemName: "list.bullet")
                 Text("Menu")
-                
-            }
+            }.environmentObject(credentialsManager)
         }
     }
 }
