@@ -84,6 +84,49 @@ struct SignInView: View {
             .padding()
         }
     }
+    private func createUser() {
+        /*
+         creas una url con la URL del recurso
+         url
+         creas una request a partir de esa URL
+         url =>request
+         le asignas el http method a la request
+         request -> http method .
+         POST crear
+         DELETE borrar
+         GEt traer
+         PUT actualizar
+         le asignas los headers. Content-Type y Accept con "Application/json" es para que sepa que va a recibir y devolver informacion en formato JSON. Hay otros headers.
+         request -> headers
+         Se crea un diccionario con la informaci'on que necesita el servidor
+         dictionary : [String:String]
+         Se convierte el diccionario en una data JSON
+         JSONEncoder().encode(dictionary)
+         se crea la tarea que va a ejecutar la request
+         URLSession.shared.dataTask(with: request)
+         y se ejecuta la request con .resume()
+         El parametro ' completionHandler' es el bloque de codigo que se ejecuta cuando el servidor responde, con los parametros opcionales (data, response, error)
+         Se usa el data, si es que existe, para crear el objeto que necesitemos ( en caso de necesitarlo ).
+         */
+        guard let url = URL(string: "\(Configuration.baseUrl)/users/login")else{
+          return
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        let userDictionary = [
+          "email": email,
+          "password": password
+        ]
+        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+          guard let data = data,
+          let user = try? JSONDecoder().decode(User.self, from: data) else {
+            return
+          }
+        }.resume()
+      }
 }
 
 struct ContentView_Previews: PreviewProvider {
