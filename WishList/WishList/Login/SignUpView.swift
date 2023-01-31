@@ -109,7 +109,7 @@ struct SignUpView: View {
         }
     }
     
-    private private func createUser() {
+    private func createUser() {
         /*
          creas una url con la URL del recurso
          url

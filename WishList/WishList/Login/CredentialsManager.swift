@@ -17,7 +17,9 @@ class CredentialsManager: ObservableObject {
         }
         set {
             UserDefaults().set(newValue, forKey: "isLogged")
-            isLogged = newValue
+            DispatchQueue.main.async{
+                self.isLogged = newValue
+            }
         }
     }
     
