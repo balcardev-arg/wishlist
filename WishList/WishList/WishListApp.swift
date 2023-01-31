@@ -9,9 +9,24 @@ import SwiftUI
 
 @main
 struct WishListApp: App {
+    @StateObject var credentialsManager = CredentialsManager()
+    
     init(){
         setNavigationViewAppearance()
         setTabViewAppearance()
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            if credentialsManager.isLoggedIn {
+                TabBar()
+                    .environmentObject(credentialsManager)
+            }else
+            {
+                SignInView()
+                    .environmentObject(credentialsManager)
+            }
+        }
     }
     
     private func setNavigationViewAppearance() {
@@ -35,11 +50,5 @@ struct WishListApp: App {
         
         UITabBar.appearance().standardAppearance = coloredAppearance
         UITabBar.appearance().scrollEdgeAppearance = coloredAppearance
-    }
-    
-    var body: some Scene {
-        WindowGroup {
-            TabBar()
-        }
     }
 }

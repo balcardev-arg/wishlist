@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SignInView: View {
     
+    @EnvironmentObject var credentialsManager: CredentialsManager
+    
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showForgotPasswordView: Bool = false
@@ -61,6 +63,8 @@ struct SignInView: View {
                 let validFields = self.email.isValidEmailAddress() && self.password.isPassword()
                 
                 Button("Sign in"){
+                    credentialsManager.isLoggedIn = true
+                    
                 }.foregroundColor(.white)
                     .frame(width: 300,height: 50)
                     .background(validFields ? .blue : .gray)
@@ -77,7 +81,7 @@ struct SignInView: View {
                     }
                 }
                 
-                NavigationLink(destination: SignUpView()){
+                NavigationLink(destination: SignUpView().environmentObject(credentialsManager)){
                     Text("Sign up")
                 }
             }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ProfileView: View {
     
+    @EnvironmentObject var credentialsManager: CredentialsManager
+    
     @State private var privateProfile = false
     
     var body: some View {
@@ -27,7 +29,9 @@ struct ProfileView: View {
             
             Spacer()
             
-            Button (action: {}){
+            Button (action: {
+                credentialsManager.logout()
+            }){
                 Text("Logout")
             }.frame(width: 200, height: 50, alignment: .center)
             .background(Color.blue)
