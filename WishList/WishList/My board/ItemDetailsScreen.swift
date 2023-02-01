@@ -47,7 +47,7 @@ struct ItemDetailsScreen: View {
 
 struct ItemDetailsScreenUIPreviews: PreviewProvider {
     @State static var fakeList = [Item]()
-    @State static var fakeItem = Item(id:"1", url:"www... ", imageUrl: "michi", author: "Lay", description: "michiLay")
+    @State static var fakeItem = Item(id:"1", url:"www... ", imageUrl: "michi", authorId: "Lay", description: "michiLay")
     
     static var previews: some View {
         ItemDetailsScreen(items: $fakeList, item: fakeItem)
