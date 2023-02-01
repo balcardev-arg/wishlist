@@ -33,7 +33,7 @@ class CredentialsManager: ObservableObject {
         isLoggedIn = false
     }
     
-    func userId() -> String? {
-        return UserDefaults().string(forKey: "userId")
+    func userId() -> String {
+        return UserDefaults().string(forKey: "userId") ?? ""
     }
 }

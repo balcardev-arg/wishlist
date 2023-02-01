@@ -10,9 +10,9 @@ import SwiftUI
 struct FriendBoardScreen: View {
     
     @State private var friendItems: [Item] = [
-        Item(id: "1", url: "www...", imageUrl: "perrito", author: "Andres", description: ""),
-        Item(id: "2", url: "www...", imageUrl: "michi", author: "Gian", description: "www..."),
-        Item(id: "3", url: "", imageUrl: "mango", author: "Lay", description: "")
+        Item(id: "1", url: "www...", imageUrl: "perrito", authorId: "Andres", description: ""),
+        Item(id: "2", url: "www...", imageUrl: "michi", authorId: "Gian", description: "www..."),
+        Item(id: "3", url: "", imageUrl: "mango", authorId: "Lay", description: "")
         
     ]
     @Binding var friends: [FakeFriend]
