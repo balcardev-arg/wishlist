@@ -63,8 +63,8 @@ struct SignInView: View {
                 let validFields = self.email.isValidEmailAddress() && self.password.isPassword()
                 
                 Button("Sign in"){
-                    credentialsManager.isLoggedIn = true
-                    
+                    signIn()
+                   
                 }.foregroundColor(.white)
                     .frame(width: 300,height: 50)
                     .background(validFields ? .blue : .gray)
@@ -88,7 +88,7 @@ struct SignInView: View {
             .padding()
         }
     }
-    private func createUser() {
+    private func signIn() {
         /*
          creas una url con la URL del recurso
          url
@@ -129,13 +129,14 @@ struct SignInView: View {
           let user = try? JSONDecoder().decode(User.self, from: data) else {
             return
           }
+            credentialsManager.login(user: user)
         }.resume()
       }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        SignInView()
+        SignInView()    
     }
 }
 
