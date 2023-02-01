@@ -42,7 +42,7 @@ struct SignInView: View {
                     
                     if isPasswordSecure {
                         SecureField("Password", text: $password)
-                    .frame(width: 350, height: 50)
+                            .frame(width: 350, height: 50)
                             .background(Color.black.opacity(0.00))
                     }else {
                         TextField("Password", text: $password)
@@ -113,29 +113,35 @@ struct SignInView: View {
          Se usa el data, si es que existe, para crear el objeto que necesitemos ( en caso de necesitarlo ).
          */
         guard let url = URL(string: "\(Configuration.baseUrl)/users/login")else{
-          return
+            return
         }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        
         let userDictionary = [
-          "email": email,
-          "password": password
+            "email": email,
+            "password": password
         ]
         request.httpBody = try? JSONEncoder().encode(userDictionary)
+        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-          guard let data = data,
-          let user = try? JSONDecoder().decode(User.self, from: data) else {
-            return
-          }
+            
+            guard let data = data,
+                  let user = try? JSONDecoder().decode(User.self, from: data) else {
+                return
+            }
+            
+            credentialsManager.login(user: user)
+            
         }.resume()
-      }
+    }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        SignInView()
+        SignInView().environmentObject(CredentialsManager())
     }
 }
 
