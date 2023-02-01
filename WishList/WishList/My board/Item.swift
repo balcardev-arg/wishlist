@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Item : Identifiable {
+struct Item : Identifiable, Codable {
     let id: String
     let url: String
     let imageUrl: String
-    let author: String
+    let authorId: String
     let description: String
 }
 

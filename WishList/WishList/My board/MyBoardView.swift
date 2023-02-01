@@ -9,15 +9,11 @@ import SwiftUI
 
 struct MyBoardView: View {
     
+    private let credentialsManager = CredentialsManager()
+    
     @State private var isPresented = false
     
     @State private var items: [Item] = []
-   
-    private let fullItems = [
-        Item(id: "1", url: "", imageUrl: "", author: "", description: ""),
-        Item(id: "2", url: "", imageUrl: "", author: "", description: ""),
-        Item(id: "3", url: "", imageUrl: "", author: "", description: "")
-    ]
     
     var body: some View {
         
@@ -47,10 +43,38 @@ struct MyBoardView: View {
             }
             
         }.accentColor(.black)
+            .onAppear {
+                getItems()
+            }
     }
     
     private func presentCreateView() {
         isPresented = true
+    }
+    
+    private func getItems() {
+        
+        let userId = credentialsManager.userId()
+        
+        guard let url = URL(string:
+            "\(Configuration.baseUrl)/items?userId=\(userId)&authorId=\(userId)")else{
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data,
+                  let items = try? JSONDecoder().decode([Item].self, from: data) else {
+                return
+            }
+            
+            self.items = items
+        }.resume()
     }
 }
 
