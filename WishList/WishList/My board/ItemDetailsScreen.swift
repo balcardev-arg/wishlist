@@ -10,7 +10,6 @@ import SwiftUI
 struct ItemDetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
     @Binding var items: [Item]
     let item: Item
     
@@ -21,18 +20,19 @@ struct ItemDetailsScreen: View {
                 Text(item.description).padding(30)
                 Spacer(minLength: 70)
             }
-        }.toolbar {
+        }
+        .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    items = items.filter{$0 != item}
-                    presentationMode.wrappedValue.dismiss()
-                }){
-                    Image(systemName: "trash.fill")   
+                if item.authorId == CredentialsManager().userId() {
+                    Button(action: self.delete) {
+                        Image(systemName: "trash.fill")
+                    }
                 }
             }
         }.overlay(alignment: .bottom){
             Button(action: {
-                print("View Item")
+                guard let url = URL(string: item.url) else {return}
+                UIApplication.shared.open(url)
             }, label: {
                 Text("View Item")
                     .foregroundColor(.white)
@@ -42,6 +42,34 @@ struct ItemDetailsScreen: View {
                     .padding()
             })
         }
+    }
+    private func delete() {
+       
+        guard let url = URL(string: "\(Configuration.baseUrl)/items")else{
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        
+        let userDictionary = [
+            "id": item.id,
+            "userId": CredentialsManager().userId()
+        ]
+        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let httpResponse = response as? HTTPURLResponse{
+                if httpResponse.statusCode == 200 {
+                
+                } else {
+                    print("error: \(httpResponse.statusCode)")
+                }
+            }
+            
+        }.resume()
     }
 }
 
