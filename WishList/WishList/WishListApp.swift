@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import FirebaseCore
 
 @main
 struct WishListApp: App {
+    
     @StateObject var credentialsManager = CredentialsManager()
     
     init(){
+        FirebaseApp.configure()
         setNavigationViewAppearance()
         setTabViewAppearance()
     }
