@@ -21,7 +21,7 @@
 		97B8041D29897F54006BCAAE /* CredentialsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B8041C29897F54006BCAAE /* CredentialsManager.swift */; };
 		97B8042029897F91006BCAAE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B8041F29897F91006BCAAE /* User.swift */; };
 		97D05520297EF27000EE6297 /* CreateItemScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0551F297EF27000EE6297 /* CreateItemScreen.swift */; };
-		97EC346D29840DD20045B850 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97EC346C29840DD20045B850 /* Configuration.swift */; };
+		CD03362E298D6DA1003BC454 /* ModalProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD03362D298D6DA1003BC454 /* ModalProgressView.swift */; };
 		CD42014729806DD3006BBDE8 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014629806DD3006BBDE8 /* ItemCell.swift */; };
 		CD42014929806DEE006BBDE8 /* FriendBoardScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014829806DEE006BBDE8 /* FriendBoardScreen.swift */; };
 		CD42014B2981550D006BBDE8 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014A2981550D006BBDE8 /* ProfileView.swift */; };
@@ -70,6 +70,7 @@
 		97B8041F29897F91006BCAAE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		97D0551F297EF27000EE6297 /* CreateItemScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemScreen.swift; sourceTree = "<group>"; };
 		97EC346C29840DD20045B850 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
+		CD03362D298D6DA1003BC454 /* ModalProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalProgressView.swift; sourceTree = "<group>"; };
 		CD42014629806DD3006BBDE8 /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemCell.swift; sourceTree = "<group>"; };
 		CD42014829806DEE006BBDE8 /* FriendBoardScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendBoardScreen.swift; sourceTree = "<group>"; };
 		CD42014A2981550D006BBDE8 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -184,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				CD4A23282979BFCA00CB665F /* StringExtension.swift */,
+				CD03362D298D6DA1003BC454 /* ModalProgressView.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -359,6 +361,7 @@
 				97B8042029897F91006BCAAE /* User.swift in Sources */,
 				977B21542980691300F0A629 /* SearchFriendsScreen.swift in Sources */,
 				97895D5C29782509003E2878 /* ItemDetailsScreen.swift in Sources */,
+				CD03362E298D6DA1003BC454 /* ModalProgressView.swift in Sources */,
 				97895D2C2975943C003E2878 /* WishListApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

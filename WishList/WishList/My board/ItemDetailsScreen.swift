@@ -10,42 +10,49 @@ import SwiftUI
 struct ItemDetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
+    @State var isDeleting: Bool = false
     @Binding var items: [Item]
     let item: Item
     
     var body: some View {
-        ScrollView {
-            VStack {
-                Image(systemName: "photo").resizable().frame(width: 370,height: 370)
-                Text(item.description).padding(30)
-                Spacer(minLength: 70)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                if item.authorId == CredentialsManager().userId() {
-                    Button(action: self.delete) {
-                        Image(systemName: "trash.fill")
-                    }
+        ZStack {
+            ScrollView {
+                VStack {
+                    Image(systemName: "photo").resizable().frame(width: 370,height: 370)
+                    Text(item.description).padding(30)
+                    Spacer(minLength: 70)
                 }
             }
-        }.overlay(alignment: .bottom){
-            Button(action: {
-                guard let url = URL(string: item.url) else {return}
-                UIApplication.shared.open(url)
-            }, label: {
-                Text("View Item")
-                    .foregroundColor(.white)
-                    .frame(width: 350, height: 40)
-                    .background(.blue)
-                    .font(.body)
-                    .padding()
-            })
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if item.authorId == CredentialsManager().userId() {
+                        Button(action: self.delete) {
+                            Image(systemName: "trash.fill")
+                            
+                        }
+                    }
+                }
+            }.overlay(alignment: .bottom){
+                Button(action: {
+                    guard let url = URL(string: item.url) else {return}
+                    UIApplication.shared.open(url)
+                }, label: {
+                    Text("View Item")
+                        .foregroundColor(.white)
+                        .frame(width: 350, height: 40)
+                        .background(.blue)
+                        .font(.body)
+                        .padding()
+                })
+            }
+            if isDeleting {
+                ModalProgressView()
+            }
         }
     }
+    
     private func delete() {
-       
+        
         guard let url = URL(string: "\(Configuration.baseUrl)/items")else{
             return
         }
@@ -60,10 +67,13 @@ struct ItemDetailsScreen: View {
             "userId": CredentialsManager().userId()
         ]
         request.httpBody = try? JSONEncoder().encode(userDictionary)
-        
+        //Se cambia la variable a true para mostrar el progress view antes de hacer la llamada a backend
+        isDeleting = true
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
+            //Se cambia la variable a false cuando se recibe la respuesta de backend para ocultar el progress view
+            isDeleting = false
             if let httpResponse = response as? HTTPURLResponse {
+                
                 if httpResponse.statusCode == 200 {
                     DispatchQueue.main.async {
                         presentationMode.wrappedValue.dismiss()
