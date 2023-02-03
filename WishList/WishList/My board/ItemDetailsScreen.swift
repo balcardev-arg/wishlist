@@ -10,6 +10,7 @@ import SwiftUI
 struct ItemDetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     @Binding var items: [Item]
     let item: Item
     
@@ -61,10 +62,13 @@ struct ItemDetailsScreen: View {
         request.httpBody = try? JSONEncoder().encode(userDictionary)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            if let httpResponse = response as? HTTPURLResponse{
+            
+            if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
-                
-                } else {
+                    DispatchQueue.main.async {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }else {
                     print("error: \(httpResponse.statusCode)")
                 }
             }
