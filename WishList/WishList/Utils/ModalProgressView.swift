@@ -11,7 +11,7 @@ struct ModalProgressView: View {
     var body: some View {
         HStack {
             ProgressView().scaleEffect(3)
-                .tint(.blue)
+                .tint(.white)
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(red: 0, green: 0, blue: 0, opacity: 0.5))
         

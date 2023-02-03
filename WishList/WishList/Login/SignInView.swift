@@ -33,10 +33,12 @@ struct SignInView: View {
                 TextField("Email", text: $email)
                     .frame(width: 350, height: 50)
                     .background(Color.black.opacity(0.00))
+                    .autocapitalization(.none)
                 
                 Text("Password")
                     .foregroundColor(.blue)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    
                 
                 HStack{
                     
@@ -48,6 +50,7 @@ struct SignInView: View {
                         TextField("Password", text: $password)
                             .frame(width: 350, height: 50)
                             .background(Color.black.opacity(0.00))
+                            .autocapitalization(.none)
                     }
                     
                     Button(action:{

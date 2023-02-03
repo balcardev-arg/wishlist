@@ -20,6 +20,8 @@ struct CreateItemScreen: View {
     @StateObject var photoPicker: PhotoPicker = PhotoPicker()
     @State var presentPhotoPicker = false
     
+    @State var isCreatingItem = false
+    
     var body: some View {
         VStack {
             Text("Url")
@@ -31,7 +33,7 @@ struct CreateItemScreen: View {
                 .padding()
                 .background(Color.black.opacity(0.05))
                 .frame(width: 375)
-                .textCase(.lowercase)
+                .autocapitalization(.none)
             
             Text("Description")
                 .fontWeight(.bold)
@@ -61,7 +63,7 @@ struct CreateItemScreen: View {
             }.photosPicker(isPresented: $presentPhotoPicker, selection: $photoPicker.photoSelection, photoLibrary: .shared())
             
             Spacer()
-            let validFields = true// !description.isEmpty && url.isValidUrl()
+            let validFields = !description.isEmpty && url.isValidUrl()
             
             Button(action: uploadImage){
                 Text("Create")
@@ -70,7 +72,12 @@ struct CreateItemScreen: View {
                 .background(validFields ? .blue : .gray)
                 .padding()
                 .disabled(!validFields)
+        }.overlay {
+            if isCreatingItem {
+                ModalProgressView()
+            }
         }
+        
     }
     
     private func showImagePicker() {
@@ -78,33 +85,37 @@ struct CreateItemScreen: View {
     }
     
     private func uploadImage() {
+        isCreatingItem = true
         let storageReference = Storage.storage().reference()
-
+        
         
         let data = photoPicker.imageData
         let imageReference = storageReference.child("\(CredentialsManager().userId())/\(Date()).jpg")
-
-
+        
+        
         imageReference.putData(data) { (metadata, error) in
-          guard let _ = metadata else {
-            //Error
-            return
-          }
-            
-          // You can also access to download URL after upload.
-            imageReference.downloadURL { (url, error) in
-            guard let imageUrl = url else {
-              //Error
-              return
+            guard let _ = metadata else {
+                //Error
+                isCreatingItem = false
+                return
             }
+            
+            // You can also access to download URL after upload.
+            imageReference.downloadURL { (url, error) in
+                guard let imageUrl = url else {
+                    //Error
+                    isCreatingItem = false
+                    return
+                }
                 createItem(with: imageUrl.absoluteString)
-          }
+            }
         }
     }
     
     private func createItem(with imageUrl: String) {
         
         guard let url = URL(string: "\(Configuration.baseUrl)/items")else{
+            isCreatingItem = false
             return
         }
         
@@ -124,7 +135,7 @@ struct CreateItemScreen: View {
         request.httpBody = try? JSONEncoder().encode(itemDictionary)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
+            isCreatingItem = false
             guard let data = data,
                   let item = try? JSONDecoder().decode(Item.self, from: data) else {
                 return
