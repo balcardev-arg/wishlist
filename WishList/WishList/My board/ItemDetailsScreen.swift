@@ -2,7 +2,7 @@
 //  ItemDetailsScreen.swift
 //  WishList
 //
-//  Created by Layla Cisneros on 18/01/2023.
+//  Created by Giancito on 18/01/2023.
 //
 
 import SwiftUI
@@ -18,9 +18,9 @@ struct ItemDetailsScreen: View {
         ZStack {
             ScrollView {
                 VStack {
-                    Image(systemName: "photo").resizable().frame(width: 370,height: 370)
+                    AsyncImage(url: URL(string: item.imageUrl)).frame(width: 390,height: 250)
                     Text(item.description).padding(30)
-                    Spacer(minLength: 70)
+                    Spacer(minLength: 100)
                 }
             }
             .toolbar {
