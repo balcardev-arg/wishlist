@@ -71,18 +71,19 @@ struct ItemDetailsScreen: View {
         isDeleting = true
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             //Se cambia la variable a false cuando se recibe la respuesta de backend para ocultar el progress view
-            isDeleting = false
-            if let httpResponse = response as? HTTPURLResponse {
-                
-                if httpResponse.statusCode == 200 {
-                    DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                isDeleting = false
+                if let httpResponse = response as? HTTPURLResponse {
+                    
+                    if httpResponse.statusCode == 200 {
+                        
                         presentationMode.wrappedValue.dismiss()
+                        
+                    }else {
+                        print("error: \(httpResponse.statusCode)")
                     }
-                }else {
-                    print("error: \(httpResponse.statusCode)")
                 }
             }
-            
         }.resume()
     }
 }
