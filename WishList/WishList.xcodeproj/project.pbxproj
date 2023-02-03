@@ -20,6 +20,10 @@
 		97895D5C29782509003E2878 /* ItemDetailsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97895D5B29782509003E2878 /* ItemDetailsScreen.swift */; };
 		97B8041D29897F54006BCAAE /* CredentialsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B8041C29897F54006BCAAE /* CredentialsManager.swift */; };
 		97B8042029897F91006BCAAE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B8041F29897F91006BCAAE /* User.swift */; };
+		97B80422298D3735006BCAAE /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B80421298D3735006BCAAE /* PhotoPicker.swift */; };
+		97B80427298D7E13006BCAAE /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 97B80426298D7E13006BCAAE /* FirebaseAnalytics */; };
+		97B80429298D7E13006BCAAE /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 97B80428298D7E13006BCAAE /* FirebaseStorage */; };
+		97B8042B298D8040006BCAAE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 97B8042A298D8040006BCAAE /* GoogleService-Info.plist */; };
 		97D05520297EF27000EE6297 /* CreateItemScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97D0551F297EF27000EE6297 /* CreateItemScreen.swift */; };
 		CD03362E298D6DA1003BC454 /* ModalProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD03362D298D6DA1003BC454 /* ModalProgressView.swift */; };
 		CD42014729806DD3006BBDE8 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD42014629806DD3006BBDE8 /* ItemCell.swift */; };
@@ -68,6 +72,8 @@
 		97895D5B29782509003E2878 /* ItemDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailsScreen.swift; sourceTree = "<group>"; };
 		97B8041C29897F54006BCAAE /* CredentialsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsManager.swift; sourceTree = "<group>"; };
 		97B8041F29897F91006BCAAE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		97B80421298D3735006BCAAE /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		97B8042A298D8040006BCAAE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		97D0551F297EF27000EE6297 /* CreateItemScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemScreen.swift; sourceTree = "<group>"; };
 		97EC346C29840DD20045B850 /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		CD03362D298D6DA1003BC454 /* ModalProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalProgressView.swift; sourceTree = "<group>"; };
@@ -87,6 +93,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				97B80427298D7E13006BCAAE /* FirebaseAnalytics in Frameworks */,
+				97B80429298D7E13006BCAAE /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +138,7 @@
 		97895D2A2975943C003E2878 /* WishList */ = {
 			isa = PBXGroup;
 			children = (
+				97B8042A298D8040006BCAAE /* GoogleService-Info.plist */,
 				CD42014E29897DAE006BBDE8 /* Configuration.swift */,
 				CD4A23272979BFB900CB665F /* Utils */,
 				97895D572976FFB7003E2878 /* Info.plist */,
@@ -184,6 +193,7 @@
 		CD4A23272979BFB900CB665F /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				97B80421298D3735006BCAAE /* PhotoPicker.swift */,
 				CD4A23282979BFCA00CB665F /* StringExtension.swift */,
 				CD03362D298D6DA1003BC454 /* ModalProgressView.swift */,
 			);
@@ -230,6 +240,10 @@
 			dependencies = (
 			);
 			name = WishList;
+			packageProductDependencies = (
+				97B80426298D7E13006BCAAE /* FirebaseAnalytics */,
+				97B80428298D7E13006BCAAE /* FirebaseStorage */,
+			);
 			productName = WishList;
 			productReference = 97895D282975943C003E2878 /* WishList.app */;
 			productType = "com.apple.product-type.application";
@@ -302,6 +316,9 @@
 				Base,
 			);
 			mainGroup = 97895D1F2975943C003E2878;
+			packageReferences = (
+				97B80425298D7E13006BCAAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 97895D292975943C003E2878 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -320,6 +337,7 @@
 			files = (
 				97895D332975943E003E2878 /* Preview Assets.xcassets in Resources */,
 				97895D302975943E003E2878 /* Assets.xcassets in Resources */,
+				97B8042B298D8040006BCAAE /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -358,6 +376,7 @@
 				CD4A232629770E8800CB665F /* SignInView.swift in Sources */,
 				977B215829818CF900F0A629 /* SignUpView.swift in Sources */,
 				CD42014729806DD3006BBDE8 /* ItemCell.swift in Sources */,
+				97B80422298D3735006BCAAE /* PhotoPicker.swift in Sources */,
 				97B8042029897F91006BCAAE /* User.swift in Sources */,
 				977B21542980691300F0A629 /* SearchFriendsScreen.swift in Sources */,
 				97895D5C29782509003E2878 /* ItemDetailsScreen.swift in Sources */,
@@ -524,6 +543,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WishList/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We want to save your filtered photo.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -552,6 +572,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WishList/Info.plist;
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We want to save your filtered photo.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -681,6 +702,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		97B80425298D7E13006BCAAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		97B80426298D7E13006BCAAE /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 97B80425298D7E13006BCAAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		97B80428298D7E13006BCAAE /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 97B80425298D7E13006BCAAE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 97895D202975943C003E2878 /* Project object */;
 }
