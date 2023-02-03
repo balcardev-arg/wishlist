@@ -6,12 +6,22 @@
 //
 
 import SwiftUI
+import FirebaseCore
+
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+        FirebaseApp.configure()
+    }
+}
 
 @main
 struct WishListApp: App {
+    @UIApplicationDelegateAdaptor (AppDelegate.self) var delegate
+    
     @StateObject var credentialsManager = CredentialsManager()
     
     init(){
+        FirebaseApp.configure()
         setNavigationViewAppearance()
         setTabViewAppearance()
     }

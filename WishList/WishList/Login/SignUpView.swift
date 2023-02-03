@@ -19,7 +19,7 @@ struct SignUpView: View {
     @State private var isPresented = false
     @State private var passwordIsVisible = false
     @State private var confirmationPasswordIsVisible = false
-
+    
     @State private var showingErrorAlert = false
     
     var body: some View {
@@ -94,18 +94,17 @@ struct SignUpView: View {
                     createUser()
                 }){
                     Text("Sign up")
-                        .foregroundColor(.white)
-                        .frame(width: 350, height: 40)
-                        .background(validFields ? .blue : .gray)
-                        .padding()
-                        .disabled(!validFields)
-                }
+                }.foregroundColor(.white)
+                    .frame(width: 350, height: 40)
+                    .background(validFields ? .blue : .gray)
+                    .padding()
+                    .disabled(!validFields)
             }.sheet(isPresented: $isPresented) {
                 MyBoardView()
             }
             .alert("Something went wrong", isPresented: $showingErrorAlert) {
-                        Button("OK", role: .cancel) {}
-                    }
+                Button("OK", role: .cancel) {}
+            }
         }
     }
     
@@ -163,7 +162,7 @@ struct SignUpView: View {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             guard let data = data,
-            let user = try? JSONDecoder().decode(User.self, from: data) else {
+                  let user = try? JSONDecoder().decode(User.self, from: data) else {
                 showingErrorAlert = true
                 return
             }

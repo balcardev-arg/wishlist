@@ -39,7 +39,7 @@ struct MyBoardView: View {
                     }
                 }
             }.sheet(isPresented: $isPresented) {
-                CreateItemScreen()
+                CreateItemScreen(items: $items)
             }
             
         }.accentColor(.black)
