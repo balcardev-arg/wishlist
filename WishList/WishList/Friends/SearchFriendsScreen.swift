@@ -18,9 +18,10 @@ struct SearchFriendsScreen: View {
     var body: some View {
         NavigationView(){
             if showInitialMessage {
-                Text("Type a least 3 characters and \n press enter to perform a \n search of people to add as friends.")
+                Text("Type a least 3 characters and press enter to perform a search of people to add as friends.")
                     .fontWeight(.black)
                     .multilineTextAlignment(.center)
+                    .padding(30)
                 
             }else {
                 ZStack {
@@ -28,9 +29,11 @@ struct SearchFriendsScreen: View {
                         FriendCell(friends: $people, friend: person.self)
                     }.overlay{
                         if people.count == 0 {
-                            Text("There are not people for this \n criteria. Try again with a \n different name.")
+                            Text("There are not people for this criteria. Try again with a different name.")
                                 .fontWeight(.black)
                                 .multilineTextAlignment(.center)
+                                .padding(30)
+                            
                         }
                     }
                     if searching {
