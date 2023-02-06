@@ -18,7 +18,7 @@ struct ItemDetailsScreen: View {
         ZStack {
             ScrollView {
                 VStack {
-                    AsyncImage(url: URL(string: item.imageUrl)).frame(width: 390,height: 250)
+                    AsyncImage(url: URL(string: item.imageUrl))
                     Text(item.description).padding(30)
                     Spacer(minLength: 100)
                 }
