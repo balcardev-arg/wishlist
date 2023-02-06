@@ -68,7 +68,7 @@
 		97895D462975943E003E2878 /* WishListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListUITests.swift; sourceTree = "<group>"; };
 		97895D482975943E003E2878 /* WishListUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WishListUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		97895D552975C762003E2878 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		97895D572976FFB7003E2878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		97895D572976FFB7003E2878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = WishList/Info.plist; sourceTree = SOURCE_ROOT; };
 		97895D5B29782509003E2878 /* ItemDetailsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailsScreen.swift; sourceTree = "<group>"; };
 		97B8041C29897F54006BCAAE /* CredentialsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialsManager.swift; sourceTree = "<group>"; };
 		97B8041F29897F91006BCAAE /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
