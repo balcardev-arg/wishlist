@@ -55,7 +55,7 @@ struct SearchFriendsScreen: View {
         
         showInitialMessage = false
         
-        guard let url = URL(string:"\(Configuration.baseUrl)/users/search?searchTerm=\(searchText)")  else {
+        guard let url = URL(string:"\(Configuration.baseUrl)/users/search?searchTerm=\(searchText)&userId=\(CredentialsManager().userId())")  else {
             return
         }
         var request = URLRequest(url: url)

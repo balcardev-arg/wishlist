@@ -17,4 +17,5 @@ struct User: Codable, Identifiable {
     var friends: [String]
     var imageUrl: String
     var name: String
+    var isFriend: Bool
 }
