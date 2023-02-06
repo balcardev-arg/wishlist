@@ -12,7 +12,7 @@ struct SearchFriendsScreen: View {
     @State private var searchText : String = ""
     @State private var showInitialMessage = true
     
-    @State private var fullFakeFriends: [FakeFriend] = []
+    @State private var friends : [User] = []
     
     var body: some View {
         NavigationView(){
@@ -23,12 +23,12 @@ struct SearchFriendsScreen: View {
                     .multilineTextAlignment(.center)
                 
             }else {
-                List(fullFakeFriends) { friend in
+                List(friends) { friend in
                     NavigationLink(destination: { Text(friend.name)}) {
                         Text("\(friend.id.lowercased())   \(friend.name.lowercased())")
                     }
                 }.overlay{
-                    if fullFakeFriends.count == 0 {
+                    if friends.count == 0 {
                         Text("There are not people for this \n criteria. Try again with a \n different name.")
                             .fontWeight(.black)
                             .multilineTextAlignment(.center)
@@ -38,20 +38,33 @@ struct SearchFriendsScreen: View {
         }.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search friends")
             .overlay{
                 Button(action: {
-                    performSearch("")
+                    searchFriend()
                 }){Text("LIST") }
             }
         
     }
     
-    private func performSearch(_ term: String) {
-        fullFakeFriends = [
-//        FakeFriend(id: "1", name: "Gian El hombre", urlImage: "", isFriend: false),
-//        FakeFriend(id: "2", name: "Andres el come hombre", urlImage: "", isFriend: false),
-//        FakeFriend(id: "3", name: "Layla", urlImage: "", isFriend: false),
-//        FakeFriend(id: "4", name: "Tu vieja", urlImage: "", isFriend: false)
-        ]
-        showInitialMessage = false
+    private func searchFriend(){
+        guard let url = URL(string:
+            "\(Configuration.baseUrl)/users/search?searchTerm\(searchText)")else{
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data,
+                  let friends = try? JSONDecoder().decode([User].self, from: data) else {
+                return
+            }
+            
+           self.friends = friends
+        }.resume()
+
     }
 }
 
