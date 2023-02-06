@@ -11,19 +11,19 @@ struct FriendsView: View {
     
     @State private var isPresentingModal = false
     
-    private let fullFriends: [FakeFriend] = []
+    private let fullFriends: [User] = []
     
-    @State private var friends: [FakeFriend] = [
-        FakeFriend(id: "1", name: "Gian El hombre", urlImage: "", isFriend: false),
-        FakeFriend(id: "2", name: "Andres el come hombre", urlImage: "", isFriend: false),
-        FakeFriend(id: "3", name: "Layla", urlImage: "", isFriend: false),
-        FakeFriend(id: "4", name: "Tu vieja", urlImage: "", isFriend: false)
+    @State private var friends: [User] = [
+        User(email: "123", friends: [], imageUrl: "", name: "Gian"),
+        User(email: "321", friends: [], imageUrl: "", name: "andres"),
+        User(email: "333", friends: [], imageUrl: "", name: "Asd"),
+        User(email: "222", friends: [], imageUrl: "", name: "Dsa")
     ]
     
     var body: some View {
         NavigationView {
             List(friends, id: \.id) { friend in
-                NavigationLink(destination: FriendBoardScreen(friends: $friends,friend: friend)){
+                NavigationLink(destination: FriendBoardScreen(friends: $friends, friend: friend)){
                     HStack {
                         Image(systemName: "person.fill")
                             .resizable()

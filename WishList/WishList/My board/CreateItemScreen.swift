@@ -33,7 +33,7 @@ struct CreateItemScreen: View {
                 .padding()
                 .background(Color.black.opacity(0.05))
                 .frame(width: 375)
-                .autocapitalization(.none)
+                .textInputAutocapitalization(.never)
             
             Text("Description")
                 .fontWeight(.bold)

@@ -33,7 +33,7 @@ struct SignInView: View {
                 TextField("Email", text: $email)
                     .frame(width: 350, height: 50)
                     .background(Color.black.opacity(0.00))
-                    .autocapitalization(.none)
+                    .textInputAutocapitalization(.never)
                 
                 Text("Password")
                     .foregroundColor(.blue)
@@ -50,7 +50,7 @@ struct SignInView: View {
                         TextField("Password", text: $password)
                             .frame(width: 350, height: 50)
                             .background(Color.black.opacity(0.00))
-                            .autocapitalization(.none)
+                            .textInputAutocapitalization(.never)
                     }
                     
                     Button(action:{

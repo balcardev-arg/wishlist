@@ -15,8 +15,8 @@ struct FriendBoardScreen: View {
         Item(id: "3", url: "", imageUrl: "mango", authorId: "Lay", description: "")
         
     ]
-    @Binding var friends: [FakeFriend]
-    @State var friend: FakeFriend
+    @Binding var friends: [User]
+    @State var friend: User
     
     var body: some View {
         NavigationView {
@@ -48,9 +48,10 @@ struct FriendBoardScreen: View {
         .toolbar {
             ToolbarItem(placement: .automatic) {
                 Button(action: {
-                    friend.isFriend = !friend.isFriend
+                    //friend.isFriend = !friend.isFriend
                 }){
-                    Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
+                    Image(systemName: "person.crop.circle.badge.minus.fill")
+//                    Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
                 }
             
             }
@@ -61,8 +62,8 @@ struct FriendBoardScreen: View {
 }
 
 struct FriendBoardScreen_Previews: PreviewProvider {
-    @State static var currentFriend = FakeFriend(id: "1", name: "Fixed friend", urlImage: "", isFriend: false)
-    @State static var fakeFriends: [FakeFriend] = [FakeFriend(id: "1", name: "Fixed friend", urlImage: "", isFriend: false)]
+    @State static var currentFriend = User(email: "", friends: [], imageUrl: "", name: "")
+    @State static var fakeFriends: [User] = [User(email: "", friends: [], imageUrl: "", name: "")]
     static var previews: some View {
         FriendBoardScreen(friends: $fakeFriends, friend: currentFriend)
     }

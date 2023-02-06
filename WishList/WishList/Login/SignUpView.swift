@@ -38,13 +38,14 @@ struct SignUpView: View {
                 .padding()
                 .background(Color.black.opacity(0.05))
                 .frame(width: 380)
-                .autocapitalization(.none)
+                .textInputAutocapitalization(.never)
             
             Text("Password")
             
             HStack () {
                 if self.passwordIsVisible {
-                    TextField("Password", text: $password).autocapitalization(.none)
+                    TextField("Password", text: $password)
+                        .textInputAutocapitalization(.never)
                 } else {
                     SecureField("Password", text: $password)
                 }
@@ -62,7 +63,8 @@ struct SignUpView: View {
             
             HStack () {
                 if self.confirmationPasswordIsVisible {
-                    TextField("Password Confirmation", text: $passwordConfirmation).autocapitalization(.none)
+                    TextField("Password Confirmation", text: $passwordConfirmation)
+                        .textInputAutocapitalization(.never)
                 } else {
                     SecureField("Password Confirmation", text: $passwordConfirmation)
                 }
