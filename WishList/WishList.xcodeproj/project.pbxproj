@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		975CED6C299162CD006F3F8A /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975CED6B299162CD006F3F8A /* FriendCell.swift */; };
 		977B21542980691300F0A629 /* SearchFriendsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977B2152298029BC00F0A629 /* SearchFriendsScreen.swift */; };
 		977B215829818CF900F0A629 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 977B215729818CF900F0A629 /* SignUpView.swift */; };
 		97895D2C2975943C003E2878 /* WishListApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97895D2B2975943C003E2878 /* WishListApp.swift */; };
@@ -33,7 +34,6 @@
 		CD4A232629770E8800CB665F /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A232529770E8800CB665F /* SignInView.swift */; };
 		CD4A23292979BFCA00CB665F /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A23282979BFCA00CB665F /* StringExtension.swift */; };
 		CD4A232E2979CF2600CB665F /* FriendsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A232D2979CF2600CB665F /* FriendsView.swift */; };
-		CD4A2331297EC6A600CB665F /* FakeFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4A2330297EC6A600CB665F /* FakeFriend.swift */; };
 		CD6462B9297EEE9400246B3B /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD6462B8297EEE9400246B3B /* TabBar.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		975CED6B299162CD006F3F8A /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		977B2152298029BC00F0A629 /* SearchFriendsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFriendsScreen.swift; sourceTree = "<group>"; };
 		977B215729818CF900F0A629 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		97895D282975943C003E2878 /* WishList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WishList.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,7 +85,6 @@
 		CD4A232529770E8800CB665F /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		CD4A23282979BFCA00CB665F /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CD4A232D2979CF2600CB665F /* FriendsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsView.swift; sourceTree = "<group>"; };
-		CD4A2330297EC6A600CB665F /* FakeFriend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeFriend.swift; sourceTree = "<group>"; };
 		CD6462B8297EEE9400246B3B /* TabBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -215,10 +215,10 @@
 		CD4A232F297EC67600CB665F /* Friends */ = {
 			isa = PBXGroup;
 			children = (
+				975CED6B299162CD006F3F8A /* FriendCell.swift */,
 				CD42014829806DEE006BBDE8 /* FriendBoardScreen.swift */,
 				977B2152298029BC00F0A629 /* SearchFriendsScreen.swift */,
 				CD4A232D2979CF2600CB665F /* FriendsView.swift */,
-				CD4A2330297EC6A600CB665F /* FakeFriend.swift */,
 				CD42014A2981550D006BBDE8 /* ProfileView.swift */,
 			);
 			path = Friends;
@@ -366,9 +366,9 @@
 				97895D2E2975943C003E2878 /* MyBoardView.swift in Sources */,
 				97895D562975C762003E2878 /* Item.swift in Sources */,
 				CD42014B2981550D006BBDE8 /* ProfileView.swift in Sources */,
-				CD4A2331297EC6A600CB665F /* FakeFriend.swift in Sources */,
 				CD4A232E2979CF2600CB665F /* FriendsView.swift in Sources */,
 				CD42014F29897DAE006BBDE8 /* Configuration.swift in Sources */,
+				975CED6C299162CD006F3F8A /* FriendCell.swift in Sources */,
 				CD4A23292979BFCA00CB665F /* StringExtension.swift in Sources */,
 				CD42014929806DEE006BBDE8 /* FriendBoardScreen.swift in Sources */,
 				97D05520297EF27000EE6297 /* CreateItemScreen.swift in Sources */,
