@@ -18,7 +18,19 @@ struct ItemDetailsScreen: View {
         ZStack {
             ScrollView {
                 VStack {
-                    AsyncImage(url: URL(string: item.imageUrl))
+                    AsyncImage(url: URL(string: item.imageUrl)) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        } else if phase.error == nil {
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                        } else {
+                            ProgressView()
+                        }
+                    }
                     Text(item.description).padding(30)
                     Spacer(minLength: 100)
                 }
@@ -76,7 +88,7 @@ struct ItemDetailsScreen: View {
                 if let httpResponse = response as? HTTPURLResponse {
                     
                     if httpResponse.statusCode == 200 {
-                        
+                        items = items.filter{$0 != item}
                         presentationMode.wrappedValue.dismiss()
                         
                     }else {
