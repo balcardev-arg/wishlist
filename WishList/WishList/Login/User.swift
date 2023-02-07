@@ -7,10 +7,16 @@
 
 import Foundation
 
-struct User: Codable {
+struct User: Codable, Identifiable {
+    var id: String {
+        get {
+            return email
+        }
+    }
     var email: String
     var friends: [String]
     var imageUrl: String
     var name: String
     var privateProfile: Bool
+    var isFriend: Bool
 }

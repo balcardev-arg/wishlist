@@ -11,47 +11,68 @@ struct SearchFriendsScreen: View {
     
     @State private var searchText : String = ""
     @State private var showInitialMessage = true
+    @State private var searching : Bool = false
     
-    @State private var fullFakeFriends: [FakeFriend] = []
+    @State private var people : [User] = []
     
     var body: some View {
         NavigationView(){
-            
             if showInitialMessage {
-                Text("Type a least 3 characters and \n press enter to perform a \n search of people to add as friends.")
+                Text("Type a least 3 characters and press enter to perform a search of people to add as friends.")
                     .fontWeight(.black)
                     .multilineTextAlignment(.center)
+                    .padding(30)
                 
             }else {
-                List(fullFakeFriends) { friend in
-                    NavigationLink(destination: { Text(friend.name)}) {
-                        Text("\(friend.id.lowercased())   \(friend.name.lowercased())")
+                ZStack {
+                    List(people) { person in
+                        FriendCell(friends: $people, friend: person.self)
+                    }.overlay{
+                        if people.count == 0 {
+                            Text("There are not people for this criteria. Try again with a different name.")
+                                .fontWeight(.black)
+                                .multilineTextAlignment(.center)
+                                .padding(30)
+                            
+                        }
                     }
-                }.overlay{
-                    if fullFakeFriends.count == 0 {
-                        Text("There are not people for this \n criteria. Try again with a \n different name.")
-                            .fontWeight(.black)
-                            .multilineTextAlignment(.center)
+                    if searching {
+                        ModalProgressView()
                     }
                 }
             }
         }.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search friends")
-            .overlay{
-                Button(action: {
-                    performSearch("")
-                }){Text("LIST") }
+            .onSubmit(of: .search) {
+                searchFriend()
             }
-        
+            .textInputAutocapitalization(.never)
     }
     
-    private func performSearch(_ term: String) {
-        fullFakeFriends = [
-//        FakeFriend(id: "1", name: "Gian El hombre", urlImage: "", isFriend: false),
-//        FakeFriend(id: "2", name: "Andres el come hombre", urlImage: "", isFriend: false),
-//        FakeFriend(id: "3", name: "Layla", urlImage: "", isFriend: false),
-//        FakeFriend(id: "4", name: "Tu vieja", urlImage: "", isFriend: false)
-        ]
+    private func searchFriend(){
+        if searchText.count < 3 {
+            return
+        }
+        
         showInitialMessage = false
+        
+        guard let url = URL(string:"\(Configuration.baseUrl)/users/search?searchTerm=\(searchText)&userId=\(CredentialsManager().userId())")  else {
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        searching = true
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            searching = false
+            guard let data = data,
+                  let people = try? JSONDecoder().decode([User].self, from: data) else {
+                return
+            }
+            
+            self.people = people
+        }.resume()
     }
 }
 
