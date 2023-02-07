@@ -91,8 +91,8 @@ struct CreateItemScreen: View {
         
         
         let data = photoPicker.imageData
-//        let imageReference = storageReference.child("\(CredentialsManager().userId())/\(Date()).jpg")
-        let imageReference = storageReference.child("andresgerace@gmail.com/\(Date()).jpg")
+        let imageReference = storageReference.child("\(CredentialsManager().userId())/\(Date()).jpg")
+       
         
         
         imageReference.putData(data) { (metadata, error) in
