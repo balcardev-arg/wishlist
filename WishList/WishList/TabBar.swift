@@ -24,8 +24,8 @@ struct TabBar: View {
                 Image(systemName: "person.2.fill")
                 Text("Friends")
             }
-            
-            ProfileView().tabItem {
+           let user = credentialsManager.userName()
+            ProfileView(user: ).tabItem {
                 Image(systemName: "list.bullet")
                 Text("Menu")
             }.environmentObject(credentialsManager)

@@ -11,19 +11,18 @@ struct ProfileView: View {
     
     @EnvironmentObject var credentialsManager: CredentialsManager
     
-    @State private var privateProfile = false
-    
+    @State var user: User
+
     var body: some View {
         VStack{
-            Image(systemName: "person.circle")
-                .resizable()
+            AsyncImage(url: URL(string: user.imageUrl))
                 .frame(width: 150, height: 150)
             
-            Text("Andres gerace")
+            Text(credentialsManager.userName())
                 .font(.largeTitle)
                 .padding()
             
-            Toggle(isOn: $privateProfile) {
+            Toggle(isOn: $user.privateProfile) {
                 Text("Private")
             }.padding()
             
@@ -42,7 +41,10 @@ struct ProfileView: View {
 }
 
 struct ProfileView_Previews: PreviewProvider {
+    
+    private static let user = User(email: "balcarce@gmail.com", friends: [], imageUrl: "", name: "", privateProfile: true)
+    
     static var previews: some View {
-        ProfileView()
+        ProfileView(user: user)
     }
 }

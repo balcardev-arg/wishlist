@@ -36,4 +36,7 @@ class CredentialsManager: ObservableObject {
     func userId() -> String {
         return UserDefaults().string(forKey: "userId") ?? ""
     }
+    func userName() -> String {
+        return UserDefaults().string(forKey: "userName") ?? ""
+    }
 }

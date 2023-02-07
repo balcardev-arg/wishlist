@@ -12,4 +12,5 @@ struct User: Codable {
     var friends: [String]
     var imageUrl: String
     var name: String
+    var privateProfile: Bool
 }
