@@ -11,50 +11,66 @@ struct FriendsView: View {
     
     @State private var isPresentingModal = false
     
-    private let fullFriends: [User] = []
+    @State private var friends: [User] = []
     
-    @State private var friends: [User] = [
-        User(email: "123", friends: [], imageUrl: "", name: "Gian", isFriend: true),
-        User(email: "321", friends: [], imageUrl: "", name: "andres", isFriend: true),
-        User(email: "333", friends: [], imageUrl: "", name: "Asd", isFriend: true),
-        User(email: "222", friends: [], imageUrl: "", name: "Dsa", isFriend: true)
-    ]
+    @State private var isLoading: Bool = false
+    
     
     var body: some View {
         NavigationView {
-            List(friends, id: \.id) { friend in
-                NavigationLink(destination: FriendBoardScreen(friends: $friends, friend: friend)){
-                    HStack {
-                        Image(systemName: "person.fill")
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .padding(10)
-                            .cornerRadius(20)
-                        Text(friend.name)
-                            .lineLimit(3)
+            ZStack {
+                List(friends, id: \.id) { friend in
+                    FriendCell(friends: $friends, friend: friend)
+                }.overlay{
+                    if friends.count == 0 {
+                        Text("There are no friends yet. Search people and add them as friends to see some friends here.")
+                            .fontWeight(.black)
+                            .multilineTextAlignment(.center)
+                            .padding()
                     }
                 }
-                //overlay se sobre escribe arriba
-            } .overlay{
-                if friends.count == 0 {
-                    Text("There are no friends yet. \n Search people and add them as friends to see some friends here.")
-                        .fontWeight(.black)
-                        .multilineTextAlignment(.center)
-                }
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        isPresentingModal = true
-                    }) {
-                        Image(systemName: "magnifyingglass").foregroundColor(.white)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isPresentingModal = true
+                        }) {
+                            Image(systemName: "magnifyingglass").foregroundColor(.white)
+                        }
                     }
                 }
+                if isLoading {
+                    ModalProgressView()
+                }
             }
+            
         }.sheet(isPresented: $isPresentingModal) {
             SearchFriendsScreen()
             
+        }.onAppear{
+            searchFriends()
         }
+    }
+    
+    private func searchFriends(){
+        guard let url = URL(string: "\(Configuration.baseUrl)/friends?userId=\(CredentialsManager().userId())") else{
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        isLoading = true
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            isLoading = false
+            guard let data = data,
+                  let friends = try? JSONDecoder().decode([User].self, from: data) else {
+                return
+            }
+            
+            self.friends = friends
+        }.resume()
     }
 }
 
