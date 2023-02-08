@@ -50,7 +50,7 @@ struct CreateItemScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             VStack {
-                photoPicker.image
+                (photoPicker.image ?? Image(systemName: "photo.circle.fill"))
                     .resizable()
                     .scaledToFill()
                     .frame(width: 200, height: 200)

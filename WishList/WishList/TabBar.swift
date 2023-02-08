@@ -35,6 +35,6 @@ struct TabBar: View {
 
 struct TabView_Previews: PreviewProvider {
     static var previews: some View {
-        TabBar()
+        TabBar().environmentObject(CredentialsManager())
     }
 }
