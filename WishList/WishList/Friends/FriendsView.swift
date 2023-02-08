@@ -14,10 +14,10 @@ struct FriendsView: View {
     private let fullFriends: [User] = []
     
     @State private var friends: [User] = [
-        User(email: "123", friends: [], imageUrl: "", name: "Gian", isFriend: true),
-        User(email: "321", friends: [], imageUrl: "", name: "andres", isFriend: true),
-        User(email: "333", friends: [], imageUrl: "", name: "Asd", isFriend: true),
-        User(email: "222", friends: [], imageUrl: "", name: "Dsa", isFriend: true)
+        User(email: "123", friends: [], imageUrl: "", name: "Gian", privateProfile: false, isFriend: true),
+        User(email: "321", friends: [], imageUrl: "", name: "andres", privateProfile: false, isFriend: true),
+        User(email: "333", friends: [], imageUrl: "", name: "Asd", privateProfile: false, isFriend: true),
+        User(email: "222", friends: [], imageUrl: "", name: "Dsa", privateProfile: false, isFriend: true)
     ]
     
     var body: some View {

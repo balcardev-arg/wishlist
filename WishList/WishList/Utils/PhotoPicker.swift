@@ -34,7 +34,6 @@ class PhotoPicker: ObservableObject {
                     self.image = Image(systemName: "multiply.circle.fill")
                 }
             }
-            
         }
     }
 }

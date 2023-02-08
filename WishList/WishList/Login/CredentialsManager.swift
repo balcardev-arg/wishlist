@@ -26,17 +26,36 @@ class CredentialsManager: ObservableObject {
     func login(user: User) {
         isLoggedIn = true
         UserDefaults().set(user.email, forKey: "userId")
+        storeUser(user)
     }
     
     func logout() {
-        UserDefaults().removeObject(forKey: "userId")
         isLoggedIn = false
+        UserDefaults().removeObject(forKey: "userId")
+        storeUser(nil)
     }
     
     func userId() -> String {
         return UserDefaults().string(forKey: "userId") ?? ""
     }
-    func userName() -> String {
-        return UserDefaults().string(forKey: "userName") ?? ""
+    
+    
+    private func storeUser(_ user: User?) {
+        guard let user = user else {
+            UserDefaults().removeObject(forKey: "user")
+            return
+        }
+        
+        let userData = try? JSONEncoder().encode(user)
+        UserDefaults.standard.set(userData, forKey: "user")
     }
+    
+    func getUser() -> User? {
+        guard let userData = UserDefaults.standard.data(forKey: "user") else {
+            return nil
+        }
+        
+        return try? JSONDecoder().decode(User.self, from: userData)
+    }
+    
 }

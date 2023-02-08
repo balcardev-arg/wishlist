@@ -18,17 +18,19 @@ struct TabBar: View {
                 Text("My Board")
             }
             
-            
-            
+
             FriendsView().tabItem {
                 Image(systemName: "person.2.fill")
                 Text("Friends")
             }
-           let user = credentialsManager.userName()
-            ProfileView(user: ).tabItem {
-                Image(systemName: "list.bullet")
-                Text("Menu")
-            }.environmentObject(credentialsManager)
+            
+            if let user = credentialsManager.getUser() {
+                ProfileView(user: user).tabItem {
+                    Image(systemName: "list.bullet")
+                    Text("Menu")
+                }.environmentObject(credentialsManager)
+            }
+            
         }
     }
 }

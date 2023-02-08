@@ -81,7 +81,7 @@ struct CreateItemScreen: View {
     }
     
     private func showImagePicker() {
-        presentPhotoPicker.toggle()
+        presentPhotoPicker = true
     }
     
     private func uploadImage() {

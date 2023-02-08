@@ -43,7 +43,7 @@ struct FriendCell: View {
 struct FriendCell_Previews: PreviewProvider {
     @State static var friend : [User] = []
     static var previews: some View {
-        FriendCell(friends: $friend, friend: User(email: "", friends: [], imageUrl:"https://img.buzzfeed.com/buzzfeed-static/static/2018-09/24/6/campaign_images/buzzfeed-prod-web-05/16-imagenes-de-stock-que-darian-para-hacer-la-pel-2-1792-1537786166-2_dblbig.jpg?resize=1200:*", name: "Pepe", isFriend: true))
+        FriendCell(friends: $friend, friend: User(email: "", friends: [], imageUrl:"https://img.buzzfeed.com/buzzfeed-static/static/2018-09/24/6/campaign_images/buzzfeed-prod-web-05/16-imagenes-de-stock-que-darian-para-hacer-la-pel-2-1792-1537786166-2_dblbig.jpg?resize=1200:*", name: "Pepe", privateProfile: false, isFriend: true))
     }
 }
 
