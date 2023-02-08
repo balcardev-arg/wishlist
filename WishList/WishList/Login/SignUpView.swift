@@ -105,7 +105,7 @@ struct SignUpView: View {
                     
                     let validFields = self.email.isValidEmailAddress() && self.password.isPassword() && self.passwordConfirmation.isPassword() && samePassword && !self.userName.isEmpty && photoPicker.image != nil
                     
-                    Button(action:uploadImage){
+                    Button(action: createUser){
                         Text("Sign up")
                     }.foregroundColor(.white)
                         .frame(width: 350, height: 40)
@@ -123,7 +123,7 @@ struct SignUpView: View {
         
     }
     
-    private func createUser(with imageUrl: String) {
+    private func createUser() {
         /*
          creas una url con la URL del recurso
          url
@@ -155,6 +155,9 @@ struct SignUpView: View {
          Se usa el data, si es que existe, para crear el objeto que necesitemos ( en caso de necesitarlo ).
          
          */
+        
+        isCreatingUser = true
+        
         guard let url = URL(string: "\(Configuration.baseUrl)/users")else{
             return
         }
@@ -168,7 +171,6 @@ struct SignUpView: View {
         let userDictionary = [
             "email": email,
             "password": password,
-            "imageUrl": imageUrl,
             "name": userName
         ]
         
@@ -181,8 +183,7 @@ struct SignUpView: View {
                 showingErrorAlert = true
                 return
             }
-            
-            credentialsManager.login(user: user)
+            uploadImage(for: user)
             
         }.resume()
     }
@@ -191,17 +192,18 @@ struct SignUpView: View {
         presentPhotoPicker.toggle()
     }
     
-    private func uploadImage() {
-        isCreatingUser = true
+    private func uploadImage(for user: User) {
+        
         let storageReference = Storage.storage().reference()
         
         let data = photoPicker.imageData
-        let imageReference = storageReference.child("\(CredentialsManager().userId())/profilePicture.jpg")
+        let imageReference = storageReference.child("\(user.id)/profilePicture.jpg")
         
         imageReference.putData(data) { (metadata, error) in
             guard let _ = metadata else {
                 //Error
                 isCreatingUser = false
+                credentialsManager.login(user: user)
                 return
             }
             
@@ -210,11 +212,36 @@ struct SignUpView: View {
                 guard let imageUrl = url else {
                     //Error
                     isCreatingUser = false
+                    credentialsManager.login(user: user)
                     return
                 }
-                createUser(with: imageUrl.absoluteString)
+                updateProfileImage(with: imageUrl.absoluteString, user: user)
             }
         }
+    }
+    
+    private func updateProfileImage(with imageUrl: String, user: User) {
+        guard let url = URL(string: "\(Configuration.baseUrl)/users/profile")else{
+            credentialsManager.login(user: user)
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "PUT"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        
+        let userDictionary = [
+            "userId": user.id,
+            "imageUrl": imageUrl
+        ]
+        
+        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            credentialsManager.login(user: user)
+        }.resume()
     }
 }
 
