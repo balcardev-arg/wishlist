@@ -13,7 +13,7 @@ struct FriendCell: View {
     @State var friend: User
     
     var body: some View {
-        NavigationLink(destination: FriendBoardScreen(friends: $friends, friend: friend)) {
+        NavigationLink(destination: FriendBoardScreen(friend: friend)) {
             HStack {
                 AsyncImage(url: URL(string: friend.imageUrl)) { phase in
                     if let image = phase.image {

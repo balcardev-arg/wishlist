@@ -50,8 +50,9 @@ struct CreateItemScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             VStack {
-                photoPicker.image
+                (photoPicker.image ?? Image(systemName: "photo.circle.fill"))
                     .resizable()
+                    .scaledToFill()
                     .frame(width: 200, height: 200)
                     .clipShape(Circle())
                 
@@ -91,6 +92,7 @@ struct CreateItemScreen: View {
         
         let data = photoPicker.imageData
         let imageReference = storageReference.child("\(CredentialsManager().userId())/\(Date()).jpg")
+       
         
         
         imageReference.putData(data) { (metadata, error) in

@@ -17,6 +17,7 @@ struct WishListApp: App {
         FirebaseApp.configure()
         setNavigationViewAppearance()
         setTabViewAppearance()
+        setSearchBarAppearance()
     }
     
     var body: some Scene {
@@ -38,9 +39,16 @@ struct WishListApp: App {
         coloredAppearance.backgroundColor = .systemBlue
         coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
+        coloredAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.black]
         
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+        
+    }
+    
+    private func setSearchBarAppearance() {
+        let blackAttribute = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        UIBarButtonItem.appearance().setTitleTextAttributes(blackAttribute , for: .normal)
     }
     
     private func setTabViewAppearance() {
