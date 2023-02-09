@@ -149,6 +149,8 @@ struct FriendBoardScreen: View {
 }
 
 struct FriendBoardScreen_Previews: PreviewProvider {
+    @State static var currentFriend = User(email: "", friends: [], imageUrl: "", name: "", privateProfile: false, isFriend: true)
+    @State static var fakeFriends: [User] = [User(email: "", friends: [], imageUrl: "", name: "", privateProfile: false, isFriend: true)]
     @State static var currentFriend = User(email: "cisneroslay@hotmail.com", friends: [], imageUrl: "", name: "Lay Cisneros", isFriend: true)
     static var previews: some View {
         FriendBoardScreen(friend: currentFriend)

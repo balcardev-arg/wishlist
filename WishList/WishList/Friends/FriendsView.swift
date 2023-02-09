@@ -15,7 +15,6 @@ struct FriendsView: View {
     
     @State private var isLoading: Bool = false
     
-    
     var body: some View {
         NavigationView {
             ZStack {
