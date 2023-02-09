@@ -58,7 +58,7 @@ struct FriendBoardScreen: View {
                 
             }
         }
-        .accentColor(.black)
+        .accentColor(.blue)
     }
     
     private func getItems() {
