@@ -34,7 +34,7 @@ struct FriendsView: View {
                         Button(action: {
                             isPresentingModal = true
                         }) {
-                            Image(systemName: "magnifyingglass").foregroundColor(.white)
+                            Image(systemName: "magnifyingglass").foregroundColor(.black)
                         }
                     }
                 }

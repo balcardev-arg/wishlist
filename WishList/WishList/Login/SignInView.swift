@@ -15,6 +15,7 @@ struct SignInView: View {
     @State private var password: String = ""
     @State private var showForgotPasswordView: Bool = false
     @State private var isPasswordSecure: Bool = true
+    @State private var passwordIsVisible = false
     
     var body: some View {
         NavigationView(){
@@ -27,40 +28,34 @@ struct SignInView: View {
                     .shadow(radius: 2)
                 
                 Text("Email")
-                    .foregroundColor(.blue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 TextField("Email", text: $email)
-                    .frame(width: 350, height: 50)
-                    .background(Color.black.opacity(0.00))
+                    .padding()
+                    .background(Color.black.opacity(0.05))
+                    .frame(width: 380)
                     .textInputAutocapitalization(.never)
                 
                 Text("Password")
-                    .foregroundColor(.blue)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                 
-                HStack{
-                    
-                    if isPasswordSecure {
-                        SecureField("Password", text: $password)
-                            .frame(width: 350, height: 50)
-                            .background(Color.black.opacity(0.00))
-                    }else {
+                HStack () {
+                    if self.passwordIsVisible {
                         TextField("Password", text: $password)
-                            .frame(width: 350, height: 50)
-                            .background(Color.black.opacity(0.00))
                             .textInputAutocapitalization(.never)
+                    } else {
+                        SecureField("Password", text: $password)
                     }
-                    
-                    Button(action:{
-                        isPasswordSecure.toggle()
-                    },label:{
-                        Image(systemName: isPasswordSecure ? "eye.slash" : "eye")
+                    Button (action: {
+                        self.passwordIsVisible.toggle()
+                    }) {
+                        Image(systemName: self.passwordIsVisible ? "eye" : "eye.slash")
                             .foregroundColor(.gray)
-                            .frame(minWidth: 10, alignment: .trailing)
-                    })
-                }
+                    }
+                }.padding()
+                    .background(Color.black.opacity(0.05))
+                    .frame(width: 380)
                 
                 //se alterno el validfields para que cambie de color el boton cuando se complete el campo de mail y pass
                 let validFields = self.email.isValidEmailAddress() && self.password.isPassword()
@@ -77,10 +72,11 @@ struct SignInView: View {
                 Button("Forgot Password?"){
                     showForgotPasswordView = true
                     //componente button
-                }.sheet(isPresented: $showForgotPasswordView){
+                }
+                .sheet(isPresented: $showForgotPasswordView){
                     ZStack{
                         Color.white.ignoresSafeArea()
-                        Text("pantalla nueva")
+                        
                     }
                 }
                 
