@@ -8,6 +8,8 @@
 import SwiftUI
 import PhotosUI
 import FirebaseStorage
+import LinkPresentation
+import MobileCoreServices
 
 struct CreateItemScreen: View {
     
@@ -16,10 +18,10 @@ struct CreateItemScreen: View {
     @Binding var items: [Item]
     
     @State var url = ""
+    @State var metadataImageData: Data = Data()
     @State var description = ""
-    @StateObject var photoPicker: PhotoPicker = PhotoPicker()
-    @State var presentPhotoPicker = false
-    
+    @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
     @State var isCreatingItem = false
     
     var body: some View {
@@ -50,19 +52,20 @@ struct CreateItemScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             VStack {
-                (photoPicker.image ?? Image(systemName: "photo.circle.fill"))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 200, height: 200)
-                    .clipShape(Circle())
-                
-                Button(action: showImagePicker){
-                    Text("Change Image").frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                    
+                if let metadataImage = UIImage(data: metadataImageData) {
+                    Image(uiImage: metadataImage)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 200)
+                        .clipShape(Circle())
+                } else {
+                    Image(systemName: "photo.circle.fill")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 200)
+                        .clipShape(Circle())
                 }
-            }.photosPicker(isPresented: $presentPhotoPicker, selection: $photoPicker.photoSelection, photoLibrary: .shared())
-            
+            }
             Spacer()
             let validFields = !description.isEmpty && url.isValidUrl()
             
@@ -78,34 +81,58 @@ struct CreateItemScreen: View {
                 ModalProgressView()
             }
         }
-        
+        .onChange(of: url) { value in
+            getMetaData(urlString: url)
+        }.alert(errorMessage, isPresented: $showingErrorAlert){}
     }
     
-    private func showImagePicker() {
-        presentPhotoPicker = true
+    private func getMetaData(urlString: String) {
+        let metadataProvider = LPMetadataProvider()
+        
+        guard let url = URL(string: urlString) else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
+            return
+        }
+        metadataProvider.startFetchingMetadata(for: url) { metadata, error in
+            guard let metadata = metadata else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
+                return
+            }
+            let _ = metadata.imageProvider?.loadDataRepresentation(for: UTType.image) { (data, imageError) in
+                guard let data = data else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                DispatchQueue.main.async {
+                    self.metadataImageData = data
+                }
+            }
+            self.description = metadata.title ?? Configuration.genericErrorMessage
+        }
     }
     
     private func uploadImage() {
         isCreatingItem = true
         let storageReference = Storage.storage().reference()
         
-        
-        let data = photoPicker.imageData
+        let data = metadataImageData
         let imageReference = storageReference.child("\(CredentialsManager().userId())/\(Date()).jpg")
-       
-        
         
         imageReference.putData(data) { (metadata, error) in
             guard let _ = metadata else {
-                //Error
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 isCreatingItem = false
                 return
             }
-            
             // You can also access to download URL after upload.
             imageReference.downloadURL { (url, error) in
                 guard let imageUrl = url else {
-                    //Error
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
                     isCreatingItem = false
                     return
                 }
@@ -115,12 +142,12 @@ struct CreateItemScreen: View {
     }
     
     private func createItem(with imageUrl: String) {
-        
-        guard let url = URL(string: "\(Configuration.baseUrl)/items")else{
+        guard let url = URL(string: "\(Configuration.baseUrl)/items") else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             isCreatingItem = false
             return
         }
-        
         var request = URLRequest(url: url)
         
         request.httpMethod = "POST"
@@ -133,20 +160,32 @@ struct CreateItemScreen: View {
             "imageUrl": imageUrl,
             "userId": CredentialsManager().userId()
         ]
-        
         request.httpBody = try? JSONEncoder().encode(itemDictionary)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             isCreatingItem = false
-            guard let data = data,
-                  let item = try? JSONDecoder().decode(Item.self, from: data) else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            
-            self.items.append(item)
-            presentationMode.wrappedValue.dismiss()
-            
-            
+            if httpResponse.statusCode == 200 {
+                guard let data = data,
+                      let item = try? JSONDecoder().decode(Item.self, from: data) else {
+                    return
+                }
+                self.items.append(item)
+                presentationMode.wrappedValue.dismiss()
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
 }

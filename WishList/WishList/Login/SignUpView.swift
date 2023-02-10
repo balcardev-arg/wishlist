@@ -22,6 +22,7 @@ struct SignUpView: View {
     @State private var confirmationPasswordIsVisible = false
     
     @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
     @StateObject var photoPicker: PhotoPicker = PhotoPicker()
     @State var presentPhotoPicker = false
     @State var isCreatingUser = false
@@ -32,7 +33,6 @@ struct SignUpView: View {
                 Spacer()
                 Text("Profile picture")
                     .fontWeight(.black)
-                
                 (photoPicker.image ?? Image(systemName: "photo.circle.fill"))
                     .resizable()
                     .scaledToFill()
@@ -115,9 +115,7 @@ struct SignUpView: View {
                 }.sheet(isPresented: $isPresented) {
                     MyBoardView()
                 }
-                .alert("Something went wrong", isPresented: $showingErrorAlert) {
-                    Button("OK", role: .cancel) {}
-                }
+                .alert(errorMessage, isPresented: $showingErrorAlert) {}
             }
         }.photosPicker(isPresented: $presentPhotoPicker, selection: $photoPicker.photoSelection, photoLibrary: .shared())
         
@@ -158,7 +156,9 @@ struct SignUpView: View {
         
         isCreatingUser = true
         
-        guard let url = URL(string: "\(Configuration.baseUrl)/users")else{
+        guard let url = URL(string: "\(Configuration.baseUrl)/users") else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             return
         }
         
@@ -177,14 +177,28 @@ struct SignUpView: View {
         request.httpBody = try? JSONEncoder().encode(userDictionary)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            guard let data = data,
-                  let user = try? JSONDecoder().decode(User.self, from: data) else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
                 showingErrorAlert = true
                 return
             }
-            uploadImage(for: user)
-            
+            if httpResponse.statusCode == 200 {
+                guard let data = data,
+                      let user = try? JSONDecoder().decode(User.self, from: data) else {
+                    showingErrorAlert = true
+                    return
+                }
+                uploadImage(for: user)
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
     
@@ -201,16 +215,17 @@ struct SignUpView: View {
         
         imageReference.putData(data) { (metadata, error) in
             guard let _ = metadata else {
-                //Error
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 isCreatingUser = false
                 credentialsManager.login(user: user)
                 return
             }
-            
             // You can also access to download URL after upload.
             imageReference.downloadURL { (url, error) in
                 guard let imageUrl = url else {
-                    //Error
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
                     isCreatingUser = false
                     credentialsManager.login(user: user)
                     return
@@ -221,11 +236,10 @@ struct SignUpView: View {
     }
     
     private func updateProfileImage(with imageUrl: String, user: User) {
-        guard let url = URL(string: "\(Configuration.baseUrl)/users/profile")else{
+        guard let url = URL(string: "\(Configuration.baseUrl)/users/profile") else {
             credentialsManager.login(user: user)
             return
         }
-        
         var request = URLRequest(url: url)
         
         request.httpMethod = "PUT"
@@ -236,11 +250,26 @@ struct SignUpView: View {
             "userId": user.id,
             "imageUrl": imageUrl
         ]
-        
         request.httpBody = try? JSONEncoder().encode(userDictionary)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            credentialsManager.login(user: user)
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
+                return
+            }
+            if httpResponse.statusCode == 200 {
+                credentialsManager.login(user: user)
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
 }

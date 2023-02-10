@@ -11,6 +11,8 @@ struct ItemDetailsScreen: View {
     
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @State var isDeleting: Bool = false
+    @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
     @Binding var items: [Item]
     let item: Item
     
@@ -40,7 +42,6 @@ struct ItemDetailsScreen: View {
                     if item.authorId == CredentialsManager().userId() {
                         Button(action: self.delete) {
                             Image(systemName: "trash.fill")
-                            
                         }
                     }
                 }
@@ -60,15 +61,16 @@ struct ItemDetailsScreen: View {
             if isDeleting {
                 ModalProgressView()
             }
-        }
+        }.alert(errorMessage, isPresented: $showingErrorAlert){}
     }
     
     private func delete() {
         
-        guard let url = URL(string: "\(Configuration.baseUrl)/items")else{
+        guard let url = URL(string: "\(Configuration.baseUrl)/items") else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             return
         }
-        
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -82,19 +84,27 @@ struct ItemDetailsScreen: View {
         //Se cambia la variable a true para mostrar el progress view antes de hacer la llamada a backend
         isDeleting = true
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            //Se cambia la variable a false cuando se recibe la respuesta de backend para ocultar el progress view
-            DispatchQueue.main.async {
-                isDeleting = false
-                if let httpResponse = response as? HTTPURLResponse {
-                    
-                    if httpResponse.statusCode == 200 {
-                        items = items.filter{$0 != item}
-                        presentationMode.wrappedValue.dismiss()
-                        
-                    }else {
-                        print("error: \(httpResponse.statusCode)")
-                    }
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
+                return
+            }
+            if httpResponse.statusCode == 200 {
+                DispatchQueue.main.async {
+                    isDeleting = false
+                    //Se cambia la variable a false cuando se recibe la respuesta de backend para ocultar el progress view
+                    items = items.filter{$0 != item}
+                    presentationMode.wrappedValue.dismiss()
                 }
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
             }
         }.resume()
     }
