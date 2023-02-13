@@ -62,43 +62,22 @@ struct MyBoardView: View {
     private func getItems() {
         isLoading = true
         let userId = credentialsManager.userId()
+       
+        let resource = "/items?userId=\(userId)&authorId=\(userId)"
         
-        guard let url = URL(string:
-            "\(Configuration.baseUrl)/items?userId=\(userId)&authorId=\(userId)") else {
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        var request = URLRequest(url: url)
+        let request = NetworkManager().createRequest(resource: resource, method: "GET")
         
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        NetworkManager().executeRequest(request: request) { (data, error) in
             isLoading = false
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+            
+            guard let data = data,
+                  let items = try? JSONDecoder().decode([Item].self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                guard let data = data,
-                      let items = try? JSONDecoder().decode([Item].self, from: data) else {
-                    return
-                }
-                self.items = items
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            self.items = items
+        }
     }
 }
 

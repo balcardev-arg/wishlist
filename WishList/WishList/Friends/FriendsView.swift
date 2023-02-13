@@ -46,51 +46,28 @@ struct FriendsView: View {
             SearchFriendsScreen()
             
         }.onAppear{
-            searchFriends()
+            getFriends()
         }
         .alert(errorMessage, isPresented: $showingErrorAlert){}
     }
     
-    private func searchFriends(){
-        guard let url = URL(string: "\(Configuration.baseUrl)/friends?userId=\(CredentialsManager().userId())") else{
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        var request = URLRequest(url: url)
+    private func getFriends(){
         
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        let request = NetworkManager().createRequest(resource: "/friends?userId=\(CredentialsManager().userId())", method: "GET")
+        
         isLoading = true
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        NetworkManager().executeRequest(request: request) { (data, error) in
             isLoading = false
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+            guard let data = data,
+                  let friends = try? JSONDecoder().decode([User].self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                guard let data = data,
-                      let friends = try? JSONDecoder().decode([User].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                self.friends = friends
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-            
-        }.resume()
+
+            self.friends = friends
+        }
     }
 }
 
