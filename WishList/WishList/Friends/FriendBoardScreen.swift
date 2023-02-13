@@ -13,6 +13,8 @@ struct FriendBoardScreen: View {
     @State var friend: User
     private let credentialsManager = CredentialsManager()
     @State private var isLoading: Bool = false
+    @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
     
     var body: some View {
         NavigationView {
@@ -54,10 +56,9 @@ struct FriendBoardScreen: View {
             ToolbarItem(placement: .automatic) {
                 Button(action: friend.isFriend ? deleteFriend  : addFriend){
                     Image(systemName: friend.isFriend ? "person.crop.circle.badge.minus.fill" : "person.crop.circle.badge.plus.fill"  )
-                }
-                
+                }.foregroundColor(.black)
             }
-        }
+        }.alert(errorMessage, isPresented: $showingErrorAlert){}
         .accentColor(.blue)
     }
     
@@ -65,7 +66,10 @@ struct FriendBoardScreen: View {
         
         let userId = credentialsManager.userId()
         
-        guard let url = URL(string: "\(Configuration.baseUrl)/items?userId=\(userId)&authorId=\(friend.id)") else {
+        let urlString = "\(Configuration.baseUrl)/items?userId=\(userId)&authorId=\(friend.id)"
+        guard let url = URL(string: urlString ) else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             return
         }
         
@@ -77,12 +81,30 @@ struct FriendBoardScreen: View {
         isLoading = true
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             isLoading = false
-            guard let data = data,
-                  let friendsItems = try? JSONDecoder().decode([Item].self, from: data) else {
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            
-            self.friendItems = friendsItems
+            if httpResponse.statusCode == 200 {
+                guard let data = data,
+                      let friendsItems = try? JSONDecoder().decode([Item].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                self.friendItems = friendsItems
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
     
@@ -90,7 +112,6 @@ struct FriendBoardScreen: View {
         guard let url = URL(string: "\(Configuration.baseUrl)/friends") else {
             return
         }
-        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -105,13 +126,21 @@ struct FriendBoardScreen: View {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             isLoading = false
             guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            
             if httpResponse.statusCode == 200 {
                 friend.isFriend = true
-            }else {
-                //mustard un error
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
             }
         }.resume()
     }
@@ -120,7 +149,6 @@ struct FriendBoardScreen: View {
         guard let url = URL(string: "\(Configuration.baseUrl)/friends") else {
             return
         }
-        
         var request = URLRequest(url: url)
         request.httpMethod = "DELETE"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -135,13 +163,21 @@ struct FriendBoardScreen: View {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             isLoading = false
             guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            
             if httpResponse.statusCode == 200 {
                 friend.isFriend = false
-            }else {
-                //mustard un error
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
             }
         }.resume()
     }
@@ -150,8 +186,6 @@ struct FriendBoardScreen: View {
 
 struct FriendBoardScreen_Previews: PreviewProvider {
     @State static var currentFriend = User(email: "", friends: [], imageUrl: "", name: "", privateProfile: false, isFriend: true)
-    @State static var fakeFriends: [User] = [User(email: "", friends: [], imageUrl: "", name: "", privateProfile: false, isFriend: true)]
-    @State static var currentFriend = User(email: "cisneroslay@hotmail.com", friends: [], imageUrl: "", name: "Lay Cisneros", isFriend: true)
     static var previews: some View {
         FriendBoardScreen(friend: currentFriend)
     }

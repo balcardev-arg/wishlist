@@ -9,4 +9,5 @@ import Foundation
 
 struct Configuration {
     static let baseUrl = "https://us-central1-balcardev-wishlist.cloudfunctions.net/app/api"
+    static let genericErrorMessage = "Something went wrong."
 }

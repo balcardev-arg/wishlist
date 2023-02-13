@@ -16,6 +16,8 @@ struct SignInView: View {
     @State private var showForgotPasswordView: Bool = false
     @State private var isPasswordSecure: Bool = true
     @State private var passwordIsVisible = false
+    @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
     
     var body: some View {
         NavigationView(){
@@ -38,7 +40,6 @@ struct SignInView: View {
                 
                 Text("Password")
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    
                 
                 HStack () {
                     if self.passwordIsVisible {
@@ -56,13 +57,11 @@ struct SignInView: View {
                 }.padding()
                     .background(Color.black.opacity(0.05))
                     .frame(width: 380)
-                
                 //se alterno el validfields para que cambie de color el boton cuando se complete el campo de mail y pass
                 let validFields = self.email.isValidEmailAddress() && self.password.isPassword()
                 
                 Button("Sign in"){
                     signIn()
-                    
                 }.foregroundColor(.white)
                     .frame(width: 300,height: 50)
                     .background(validFields ? .blue : .gray)
@@ -76,10 +75,8 @@ struct SignInView: View {
                 .sheet(isPresented: $showForgotPasswordView){
                     ZStack{
                         Color.white.ignoresSafeArea()
-                        
                     }
                 }
-                
                 NavigationLink(destination: SignUpView().environmentObject(credentialsManager)){
                     Text("Sign up")
                 }
@@ -111,10 +108,11 @@ struct SignInView: View {
          El parametro ' completionHandler' es el bloque de codigo que se ejecuta cuando el servidor responde, con los parametros opcionales (data, response, error)
          Se usa el data, si es que existe, para crear el objeto que necesitemos ( en caso de necesitarlo ).
          */
-        guard let url = URL(string: "\(Configuration.baseUrl)/users/login")else{
+        guard let url = URL(string: "\(Configuration.baseUrl)/users/login") else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             return
         }
-        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -127,13 +125,27 @@ struct SignInView: View {
         request.httpBody = try? JSONEncoder().encode(userDictionary)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
-            guard let data = data,
-                  let user = try? JSONDecoder().decode(User.self, from: data) else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            credentialsManager.login(user: user)
-            
+            if httpResponse.statusCode == 200 {
+                guard let data = data,
+                      let user = try? JSONDecoder().decode(User.self, from: data) else {
+                    return
+                }
+                credentialsManager.login(user: user)
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
 }

@@ -12,9 +12,11 @@ struct MyBoardView: View {
     private let credentialsManager = CredentialsManager()
     
     @State private var isPresented = false
-    
     @State private var items: [Item] = []
     @State private var isLoading = false
+    @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
+    
     var body: some View {
         
         NavigationView {
@@ -50,6 +52,7 @@ struct MyBoardView: View {
             .onAppear {
                 getItems()
             }
+            .alert(errorMessage, isPresented: $showingErrorAlert){}
     }
     
     private func presentCreateView() {
@@ -57,12 +60,13 @@ struct MyBoardView: View {
     }
     
     private func getItems() {
-        
         isLoading = true
         let userId = credentialsManager.userId()
         
         guard let url = URL(string:
             "\(Configuration.baseUrl)/items?userId=\(userId)&authorId=\(userId)") else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             return
         }
         var request = URLRequest(url: url)
@@ -73,12 +77,27 @@ struct MyBoardView: View {
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             isLoading = false
-            guard let data = data,
-                  let items = try? JSONDecoder().decode([Item].self, from: data) else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            
-            self.items = items
+            if httpResponse.statusCode == 200 {
+                guard let data = data,
+                      let items = try? JSONDecoder().decode([Item].self, from: data) else {
+                    return
+                }
+                self.items = items
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
 }

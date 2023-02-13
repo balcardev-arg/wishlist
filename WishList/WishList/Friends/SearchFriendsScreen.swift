@@ -12,6 +12,8 @@ struct SearchFriendsScreen: View {
     @State private var searchText : String = ""
     @State private var showInitialMessage = true
     @State private var searching : Bool = false
+    @State private var showingErrorAlert = false
+    @State private var errorMessage: String = ""
     
     @State private var people : [User] = []
     
@@ -46,16 +48,17 @@ struct SearchFriendsScreen: View {
                 searchFriend()
             }
             .textInputAutocapitalization(.never)
+            .alert(errorMessage, isPresented: $showingErrorAlert){}
     }
     
     private func searchFriend(){
         if searchText.count < 3 {
             return
         }
-        
         showInitialMessage = false
-        
-        guard let url = URL(string:"\(Configuration.baseUrl)/users/search?searchTerm=\(searchText)&userId=\(CredentialsManager().userId())")  else {
+        guard let url = URL(string:"\(Configuration.baseUrl)/users/search?searchTerm=\(searchText)&userId=\(CredentialsManager().userId())") else {
+            errorMessage = Configuration.genericErrorMessage
+            showingErrorAlert = true
             return
         }
         var request = URLRequest(url: url)
@@ -66,12 +69,29 @@ struct SearchFriendsScreen: View {
         searching = true
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             searching = false
-            guard let data = data,
-                  let people = try? JSONDecoder().decode([User].self, from: data) else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                errorMessage = Configuration.genericErrorMessage
+                showingErrorAlert = true
                 return
             }
-            
-            self.people = people
+            if httpResponse.statusCode == 200{
+                guard let data = data,
+                      let people = try? JSONDecoder().decode([User].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                self.people = people
+            } else {
+                guard let data = data,
+                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
+                    showingErrorAlert = true
+                    return
+                }
+                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
+                showingErrorAlert = true
+            }
         }.resume()
     }
 }
