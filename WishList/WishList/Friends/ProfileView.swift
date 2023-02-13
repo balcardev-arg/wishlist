@@ -17,15 +17,26 @@ struct ProfileView: View {
     @StateObject var photoPicker: PhotoPicker = PhotoPicker()
     @State private var presentPhotoPicker = false
     @State private var isUploadingImage = false
+    @State private var toggleIsEnable = false
+    @State private var isEditing = false
     
     var body: some View {
-        ZStack {
+        NavigationView {
             VStack{
-                AsyncImage(url: URL(string: user.imageUrl))
-                    .frame(width: 150, height: 150)
-                Button(action: { presentPhotoPicker = true }){
-                    Text("Change Image").frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
+                AsyncImage(url: URL(string: user.imageUrl)) { image in
+                    image.resizable()
+                }
+            placeholder: {
+                ProgressView()
+            }.scaledToFit()
+                    .cornerRadius(30)
+                    .frame(width: 250, height: 250)
+                
+                if isEditing {
+                    Button(action: { presentPhotoPicker = true }){
+                        Text("Change Image").frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    }
                 }
                 
                 Text(user.name)
@@ -34,24 +45,37 @@ struct ProfileView: View {
                 
                 Toggle(isOn: $user.privateProfile) {
                     Text("Private")
-                }
-                .padding()
+                    
+                }.disabled(!toggleIsEnable)
+                    .padding()
                 
                 Spacer()
                 
-                Button (action: {
-                    credentialsManager.logout()
-                }){
+                Button (action:credentialsManager.logout){
                     Text("Logout")
                 }.frame(width: 200, height: 50, alignment: .center)
                     .background(Color.blue)
                     .foregroundColor(Color.white)
                     .padding()
+                
             }
+            .listStyle(.grouped)
+            .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: isEditing ? saveChanges : editProfile) {
+                        Text(isEditing ? "Save" : "Edit").foregroundColor(.white)
+                    }
+                }
+            }
+            
             if isUploadingImage {
                 ModalProgressView()
             }
         }
+        
+        
         
         .onChange(of: user.privateProfile) { isPrivate in
             setPrivateProfile(isPrivate: isPrivate)
@@ -60,6 +84,19 @@ struct ProfileView: View {
             uploadImage(data: newImageData)
         }
         .photosPicker(isPresented: $presentPhotoPicker, selection: $photoPicker.photoSelection)
+    }
+    
+    
+    private func saveChanges() {
+        //fijarse que guardar y guardarlo
+        //una vez guardado se sale de edit mode
+        self.isEditing.toggle()
+        self.toggleIsEnable = self.isEditing
+    }
+    
+    private func editProfile() {
+        self.isEditing.toggle()
+        self.toggleIsEnable = self.isEditing
     }
     
     private func uploadImage(data: Data) {
@@ -106,11 +143,11 @@ struct ProfileView: View {
         
         let jsonData = try! JSONSerialization.data(withJSONObject: userDictionary)
         let data = try! JSONEncoder().encode(jsonData)
-
+        
         request.httpBody = data
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-        
+            
             guard let httpResponse = response as? HTTPURLResponse else {
                 //error
                 return
