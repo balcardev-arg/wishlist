@@ -73,129 +73,64 @@ struct FriendBoardScreen: View {
                 }.foregroundColor(.black)
             }
         }.alert(errorMessage, isPresented: $showingErrorAlert){}
-        .accentColor(.blue)
+            .accentColor(.blue)
     }
     
     private func getItems() {
         
         let userId = credentialsManager.userId()
         
-        let urlString = "\(Configuration.baseUrl)/items?userId=\(userId)&authorId=\(friend.id)"
-        guard let url = URL(string: urlString ) else {
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        let request = NetworkManager().createRequest(resource: "/items?userId=\(userId)&authorId=\(friend.id)", method: "GET")
         isLoading = true
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        
+        NetworkManager().executeRequest(request: request) { (data, error) in
             isLoading = false
-            
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+            guard let data = data,
+                  let friendsItems = try? JSONDecoder().decode([Item].self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                guard let data = data,
-                      let friendsItems = try? JSONDecoder().decode([Item].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                self.friendItems = friendsItems
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            self.friendItems = friendsItems
+        }
     }
     
     private func addFriend(){
-        guard let url = URL(string: "\(Configuration.baseUrl)/friends") else {
-            return
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
         let userDictionary = [
             "userId": credentialsManager.userId(),
             "friendId": friend.email
         ]
-        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        let request = NetworkManager().createRequest(resource: "/friends", method: "POST", parameters: userDictionary)
         isLoading = true
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        
+        NetworkManager().executeRequest(request: request) { (data, error) in
             isLoading = false
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+            if let error = error {
+                errorMessage = error
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                friend.isFriend = true
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            friend.isFriend = true
+        }
     }
     
     private func deleteFriend(){
-        guard let url = URL(string: "\(Configuration.baseUrl)/friends") else {
-            return
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
         let userDictionary = [
             "userId": credentialsManager.userId(),
             "friendId": friend.email
         ]
-        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        let request = NetworkManager().createRequest(resource: "/friends", method: "DELETE",parameters: userDictionary)
         isLoading = true
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            isLoading = false
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+        
+        NetworkManager().executeRequest(request: request) { (data, error) in
+            if let error = error {
+                errorMessage = error
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                friend.isFriend = false
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            friend.isFriend = false
+        }
     }
-    
 }
 
 struct FriendBoardScreen_Previews: PreviewProvider {

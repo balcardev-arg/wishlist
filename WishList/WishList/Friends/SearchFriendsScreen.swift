@@ -56,43 +56,21 @@ struct SearchFriendsScreen: View {
             return
         }
         showInitialMessage = false
-        guard let url = URL(string:"\(Configuration.baseUrl)/users/search?searchTerm=\(searchText)&userId=\(CredentialsManager().userId())") else {
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        var request = URLRequest(url: url)
         
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
+        let request = NetworkManager().createRequest(resource: "/users/search?searchTerm=\(searchText)&userId=\(CredentialsManager().userId())", method: "GET")
+        
         searching = true
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        
+        NetworkManager().executeRequest(request: request) { (data, error) in
             searching = false
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+            guard let data = data,
+                  let people = try? JSONDecoder().decode([User].self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200{
-                guard let data = data,
-                      let people = try? JSONDecoder().decode([User].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                self.people = people
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            self.people = people
+        }
     }
 }
 

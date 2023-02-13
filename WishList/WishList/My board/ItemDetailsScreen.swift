@@ -66,48 +66,23 @@ struct ItemDetailsScreen: View {
     }
     
     private func delete() {
-        
-        guard let url = URL(string: "\(Configuration.baseUrl)/items") else {
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "DELETE"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
         let userDictionary = [
             "id": item.id,
             "userId": CredentialsManager().userId()
         ]
-        request.httpBody = try? JSONEncoder().encode(userDictionary)
-        //Se cambia la variable a true para mostrar el progress view antes de hacer la llamada a backend
+        let request = NetworkManager().createRequest(resource: "/items", method: "DELETE", parameters: userDictionary)
         isDeleting = true
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+        
+        NetworkManager().executeRequest(request: request) { (data, error) in
+            isDeleting = false
+            if let error = error {
+                errorMessage = error
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                DispatchQueue.main.async {
-                    isDeleting = false
-                    //Se cambia la variable a false cuando se recibe la respuesta de backend para ocultar el progress view
-                    items = items.filter{$0 != item}
-                    presentationMode.wrappedValue.dismiss()
-                }
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            items = items.filter{$0 != item}
+            presentationMode.wrappedValue.dismiss()
+        }
     }
 }
 
