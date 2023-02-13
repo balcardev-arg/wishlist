@@ -54,6 +54,7 @@ struct ItemDetailsScreen: View {
                         .foregroundColor(.white)
                         .frame(width: 350, height: 40)
                         .background(.blue)
+                        .cornerRadius(25)
                         .font(.body)
                         .padding()
                 })
