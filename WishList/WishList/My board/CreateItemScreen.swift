@@ -74,6 +74,7 @@ struct CreateItemScreen: View {
             }.frame(width: 350, height: 40)
                 .foregroundColor(.white)
                 .background(validFields ? .blue : .gray)
+                .cornerRadius(25)
                 .padding()
                 .disabled(!validFields)
         }.overlay {

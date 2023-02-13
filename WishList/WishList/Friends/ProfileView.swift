@@ -46,6 +46,7 @@ struct ProfileView: View {
                 }.frame(width: 200, height: 50, alignment: .center)
                     .background(Color.blue)
                     .foregroundColor(Color.white)
+                    .cornerRadius(25)
                     .padding()
             }
             if isUploadingImage {

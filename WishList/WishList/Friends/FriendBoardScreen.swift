@@ -21,11 +21,25 @@ struct FriendBoardScreen: View {
             ZStack {
                 VStack {
                     HStack {
-                        Image(systemName: "person.fill").resizable()
-                            .frame(width: 150,height: 150)
-                            .background(.gray)
-                            .clipShape(Circle())
-                            .padding()
+                        AsyncImage(url: URL(string: friend.imageUrl)) { phase in
+                            if let image = phase.image {
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 150, height: 150)
+                                    .clipShape(Circle())
+                                    .padding()
+                            } else if phase.error == nil {
+                                Image(systemName: "person.fill")
+                                    .resizable()
+                                    .frame(width: 150,height: 150)
+                                    .background(.gray)
+                                    .clipShape(Circle())
+                                    .padding()
+                            } else {
+                                ProgressView()
+                            }
+                        }
                         Spacer()
                         Text(friend.name)
                             .fontWeight(.black)

@@ -24,10 +24,11 @@ struct SignInView: View {
             VStack(spacing: 20.0) {
                 Image("Logo")
                     .resizable()
-                    .frame(width: 180, height: 180).clipShape(Circle())
-                    .background(.gray)
-                    .cornerRadius(90)
-                    .shadow(radius: 2)
+                    .frame(width: 180, height: 180)
+                    .clipShape(Circle())
+                //TODO: check how this looks with the LOGO.
+                    .overlay(Circle().stroke(Color(.gray)))
+                    .shadow(radius:2)
                 
                 Text("Email")
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -65,7 +66,7 @@ struct SignInView: View {
                 }.foregroundColor(.white)
                     .frame(width: 300,height: 50)
                     .background(validFields ? .blue : .gray)
-                    .cornerRadius(10)
+                    .cornerRadius(25)
                     .disabled(!validFields)
                 
                 Button("Forgot Password?"){

@@ -110,6 +110,7 @@ struct SignUpView: View {
                     }.foregroundColor(.white)
                         .frame(width: 350, height: 40)
                         .background(validFields ? .blue : .gray)
+                        .cornerRadius(25)
                         .disabled(!validFields)
                         .padding()
                 }.sheet(isPresented: $isPresented) {
