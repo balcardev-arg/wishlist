@@ -29,7 +29,7 @@ struct SignUpView: View {
     
     var body: some View {
         ScrollView {
-            VStack (alignment: .leading) {
+            VStack (alignment: .center, spacing: 10) {
                 Spacer()
                 Text("Profile picture")
                     .fontWeight(.black)
@@ -38,11 +38,10 @@ struct SignUpView: View {
                     .scaledToFill()
                     .frame(width: 200, height: 200)
                     .clipShape(Circle())
-                
+                    .overlay(Circle().stroke(.gray))
                 Button(action: showImagePicker){
                     Text("Select image")
                 }
-                Spacer()
                 VStack (alignment: .leading, spacing: 10) {
                     Text("Email")
                     
@@ -53,7 +52,6 @@ struct SignUpView: View {
                         .textInputAutocapitalization(.never)
                     
                     Text("Password")
-                }
                 HStack () {
                     if self.passwordIsVisible {
                         TextField("Password", text: $password)
@@ -72,7 +70,7 @@ struct SignUpView: View {
                     .frame(width: 380)
                 
                 Text("Password Confirmation")
-                
+            }
                 HStack () {
                     if self.confirmationPasswordIsVisible {
                         TextField("Password Confirmation", text: $passwordConfirmation)
@@ -186,6 +184,7 @@ struct SignUpView: View {
             if httpResponse.statusCode == 200 {
                 guard let data = data,
                       let user = try? JSONDecoder().decode(User.self, from: data) else {
+                    errorMessage = Configuration.genericErrorMessage
                     showingErrorAlert = true
                     return
                 }
@@ -260,6 +259,7 @@ struct SignUpView: View {
                 return
             }
             if httpResponse.statusCode == 200 {
+                user.imageUrl = imageUrl
                 credentialsManager.login(user: user)
             } else {
                 guard let data = data,

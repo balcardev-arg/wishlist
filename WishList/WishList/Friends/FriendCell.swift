@@ -15,22 +15,16 @@ struct FriendCell: View {
     var body: some View {
         NavigationLink(destination: FriendBoardScreen(friend: friend)) {
             HStack {
-                AsyncImage(url: URL(string: friend.imageUrl)) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(Circle())
-                            .frame(width: 60, height: 60)
-                    } else if phase.error == nil {
-                        Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(Circle())
-                            .frame(width: 60, height: 60)
-                    } else {
-                        ProgressView()
-                    }
+                AsyncImage(url: URL(string: friend.imageUrl)) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(.gray))
+                        .frame(width: 60, height: 60)
+                } placeholder: {
+                    ProgressView()
+                        .frame(width: 60, height: 60)
                 }
                 Text(friend.name)
                     .foregroundColor(.black)

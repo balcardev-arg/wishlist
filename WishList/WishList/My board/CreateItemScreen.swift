@@ -58,12 +58,14 @@ struct CreateItemScreen: View {
                         .scaledToFill()
                         .frame(width: 200, height: 200)
                         .clipShape(Circle())
+                        .overlay(Circle().stroke(.gray))
                 } else {
                     Image(systemName: "photo.circle.fill")
                         .resizable()
                         .scaledToFill()
                         .frame(width: 200, height: 200)
                         .clipShape(Circle())
+                        .overlay(Circle().stroke(.gray))
                 }
             }
             Spacer()
@@ -82,7 +84,8 @@ struct CreateItemScreen: View {
                 ModalProgressView()
             }
         }
-        .onChange(of: url) { value in
+        
+        .onSubmit(of: .text) {
             getMetaData(urlString: url)
         }.alert(errorMessage, isPresented: $showingErrorAlert){}
     }

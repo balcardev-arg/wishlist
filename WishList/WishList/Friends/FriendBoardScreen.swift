@@ -21,35 +21,32 @@ struct FriendBoardScreen: View {
             ZStack {
                 VStack {
                     HStack {
-                        AsyncImage(url: URL(string: friend.imageUrl)) { phase in
-                            if let image = phase.image {
-                                image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 150, height: 150)
-                                    .clipShape(Circle())
-                                    .padding()
-                            } else if phase.error == nil {
-                                Image(systemName: "person.fill")
-                                    .resizable()
-                                    .frame(width: 150,height: 150)
-                                    .background(.gray)
-                                    .clipShape(Circle())
-                                    .padding()
-                            } else {
-                                ProgressView()
-                            }
+                        AsyncImage(url: URL(string: friend.imageUrl)) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 150, height: 150)
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(.gray))
+                                .padding()
+                        } placeholder: {
+                            ProgressView()
+                                .frame(width: 150, height: 150)
                         }
-                        Spacer()
                         Text(friend.name)
                             .fontWeight(.black)
                             .font(.title2)
-                            .multilineTextAlignment(.leading)
-                            .padding(30)
-                    }.background(Color .gray.opacity(0.2))
+                            .lineLimit(3)
+                            .padding(.trailing, CGFloat(10))
+                            .padding(.leading, CGFloat(5))
+                        Spacer()
+                    }
+                    .background(Color .gray.opacity(0.2))
+                    
                     List(friendItems) { item in
                         ItemCell(items: $friendItems, item: item)
-                    }.overlay {
+                    }
+                    .overlay {
                         if (friendItems.count == 0) {
                             Text("This person has no items yet!")
                                 .fontWeight(.black)
@@ -61,7 +58,6 @@ struct FriendBoardScreen: View {
                     ModalProgressView()
                 }
             }
-            
         }.onAppear{
             getItems()
         }

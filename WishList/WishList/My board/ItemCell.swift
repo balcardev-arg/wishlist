@@ -14,13 +14,14 @@ struct ItemCell: View {
         NavigationLink(destination: ItemDetailsScreen(items: $items, item: item)) {
             HStack {
                 AsyncImage(url: URL(string: item.imageUrl)) { image in
-                    image.resizable()
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .clipShape(Circle())
+                        .overlay(Circle().stroke(.gray))
                 } placeholder: {
                     ProgressView()
-                }.scaledToFill()
-                    .clipShape(Circle())
-                    .frame(width: 60, height: 60)
-                
+                }.frame(width: 60, height: 60)
                 Text(item.description)
                     .lineLimit(3)
                     .padding(10)
