@@ -17,10 +17,9 @@ struct SignUpView: View {
     @State private var password = ""
     @State private var passwordConfirmation = ""
     @State private var userName = ""
-    @State private var isPresented = false
     @State private var passwordIsVisible = false
     @State private var confirmationPasswordIsVisible = false
-    
+    @State private var isLoading = false
     @State private var showingErrorAlert = false
     @State private var errorMessage: String = ""
     @StateObject var photoPicker: PhotoPicker = PhotoPicker()
@@ -29,7 +28,7 @@ struct SignUpView: View {
     
     var body: some View {
         ScrollView {
-            VStack (alignment: .leading) {
+            VStack (alignment: .center) {
                 Spacer()
                 Text("Profile picture")
                     .fontWeight(.black)
@@ -53,26 +52,26 @@ struct SignUpView: View {
                         .textInputAutocapitalization(.never)
                     
                     Text("Password")
+                    
+                    HStack () {
+                        if self.passwordIsVisible {
+                            TextField("Password", text: $password)
+                                .textInputAutocapitalization(.never)
+                        } else {
+                            SecureField("Password", text: $password)
+                        }
+                        Button (action: {
+                            self.passwordIsVisible.toggle()
+                        }) {
+                            Image(systemName: self.passwordIsVisible ? "eye" : "eye.slash")
+                                .foregroundColor(.gray)
+                        }
+                    }.padding()
+                        .background(Color.black.opacity(0.05))
+                        .frame(width: 380)
+                    
+                    Text("Password Confirmation")
                 }
-                HStack () {
-                    if self.passwordIsVisible {
-                        TextField("Password", text: $password)
-                            .textInputAutocapitalization(.never)
-                    } else {
-                        SecureField("Password", text: $password)
-                    }
-                    Button (action: {
-                        self.passwordIsVisible.toggle()
-                    }) {
-                        Image(systemName: self.passwordIsVisible ? "eye" : "eye.slash")
-                            .foregroundColor(.gray)
-                    }
-                }.padding()
-                    .background(Color.black.opacity(0.05))
-                    .frame(width: 380)
-                
-                Text("Password Confirmation")
-                
                 HStack () {
                     if self.confirmationPasswordIsVisible {
                         TextField("Password Confirmation", text: $passwordConfirmation)
@@ -113,10 +112,10 @@ struct SignUpView: View {
                         .cornerRadius(25)
                         .disabled(!validFields)
                         .padding()
-                }.sheet(isPresented: $isPresented) {
-                    MyBoardView()
+                }.alert(errorMessage, isPresented: $showingErrorAlert) {}
+                if isLoading {
+                    ModalProgressView()
                 }
-                .alert(errorMessage, isPresented: $showingErrorAlert) {}
             }
         }.photosPicker(isPresented: $presentPhotoPicker, selection: $photoPicker.photoSelection, photoLibrary: .shared())
         
@@ -154,53 +153,25 @@ struct SignUpView: View {
          Se usa el data, si es que existe, para crear el objeto que necesitemos ( en caso de necesitarlo ).
          
          */
-        
-        isCreatingUser = true
-        
-        guard let url = URL(string: "\(Configuration.baseUrl)/users") else {
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
         let userDictionary = [
             "email": email,
             "password": password,
             "name": userName
         ]
+        let request = NetworkManager().createRequest(resource: "/users", method: "POST", parameters: userDictionary)
+        isCreatingUser = true
+        isLoading = true
         
-        request.httpBody = try? JSONEncoder().encode(userDictionary)
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+        NetworkManager().executeRequest(request: request) { (data, error) in
+            isLoading = false
+            guard let data = data,
+                  let user = try? JSONDecoder().decode(User.self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                guard let data = data,
-                      let user = try? JSONDecoder().decode(User.self, from: data) else {
-                    showingErrorAlert = true
-                    return
-                }
-                uploadImage(for: user)
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            uploadImage(for: user)
+        }
     }
     
     private func showImagePicker() {
@@ -237,41 +208,23 @@ struct SignUpView: View {
     }
     
     private func updateProfileImage(with imageUrl: String, user: User) {
-        guard let url = URL(string: "\(Configuration.baseUrl)/users/profile") else {
-            credentialsManager.login(user: user)
-            return
-        }
-        var request = URLRequest(url: url)
-        
-        request.httpMethod = "PUT"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
         let userDictionary = [
             "userId": user.id,
             "imageUrl": imageUrl
         ]
-        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        let request = NetworkManager().createRequest(resource: "/users/profile", method: "PUT", parameters: userDictionary)
+        isLoading = true
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+        NetworkManager().executeRequest(request: request) { (data, error) in
+            isLoading = false
+            guard let data = data,
+                  let currentUser = try? JSONDecoder().decode(User.self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                credentialsManager.login(user: user)
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            credentialsManager.login(user: currentUser)
+        }
     }
 }
 

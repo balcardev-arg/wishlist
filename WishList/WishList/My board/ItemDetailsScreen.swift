@@ -25,12 +25,8 @@ struct ItemDetailsScreen: View {
                             image
                                 .resizable()
                                 .scaledToFit()
-                        } else if phase.error == nil {
-                            Image(systemName: "photo")
-                                .resizable()
-                                .scaledToFit()
                         } else {
-                            ProgressView()
+                            ProgressView().scaleEffect(2).frame(height: 300)
                         }
                     }
                     Text(item.description).padding(30)

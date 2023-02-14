@@ -17,6 +17,7 @@ struct SignInView: View {
     @State private var isPasswordSecure: Bool = true
     @State private var passwordIsVisible = false
     @State private var showingErrorAlert = false
+    @State private var isLoading = false
     @State private var errorMessage: String = ""
     
     var body: some View {
@@ -83,6 +84,11 @@ struct SignInView: View {
                 }
             }
             .padding()
+            .overlay {
+                if isLoading {
+                    ModalProgressView()
+                }
+            }
         }
     }
     private func signIn() {
@@ -109,45 +115,23 @@ struct SignInView: View {
          El parametro ' completionHandler' es el bloque de codigo que se ejecuta cuando el servidor responde, con los parametros opcionales (data, response, error)
          Se usa el data, si es que existe, para crear el objeto que necesitemos ( en caso de necesitarlo ).
          */
-        guard let url = URL(string: "\(Configuration.baseUrl)/users/login") else {
-            errorMessage = Configuration.genericErrorMessage
-            showingErrorAlert = true
-            return
-        }
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Accept")
-        
         let userDictionary = [
             "email": email,
             "password": password
         ]
-        request.httpBody = try? JSONEncoder().encode(userDictionary)
+        let request = NetworkManager().createRequest(resource: "/users/login", method: "POST", parameters: userDictionary)
+        isLoading = true
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                errorMessage = Configuration.genericErrorMessage
+        NetworkManager().executeRequest(request: request) { (data, error) in
+            isLoading = false
+            guard let data = data,
+                  let user = try? JSONDecoder().decode(User.self, from: data) else {
+                errorMessage = error!
                 showingErrorAlert = true
                 return
             }
-            if httpResponse.statusCode == 200 {
-                guard let data = data,
-                      let user = try? JSONDecoder().decode(User.self, from: data) else {
-                    return
-                }
-                credentialsManager.login(user: user)
-            } else {
-                guard let data = data,
-                      let errorDictionary = try? JSONDecoder().decode([String:String].self, from: data) else {
-                    errorMessage = Configuration.genericErrorMessage
-                    showingErrorAlert = true
-                    return
-                }
-                errorMessage = errorDictionary["error"] ?? Configuration.genericErrorMessage
-                showingErrorAlert = true
-            }
-        }.resume()
+            credentialsManager.login(user: user)
+        }
     }
 }
 
