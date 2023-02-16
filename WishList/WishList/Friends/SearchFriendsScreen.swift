@@ -24,8 +24,7 @@ struct SearchFriendsScreen: View {
                     .fontWeight(.black)
                     .multilineTextAlignment(.center)
                     .padding(30)
-                
-            }else {
+            } else {
                 ZStack {
                     List(people) { person in
                         FriendCell(friends: $people, friend: person.self)
@@ -35,7 +34,6 @@ struct SearchFriendsScreen: View {
                                 .fontWeight(.black)
                                 .multilineTextAlignment(.center)
                                 .padding(30)
-                            
                         }
                     }
                     if searching {

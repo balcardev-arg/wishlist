@@ -26,13 +26,12 @@ struct FriendBoardScreen: View {
                                 image
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 150, height: 150)
                                     .clipShape(Circle())
                                     .padding()
                             } else {
                                 ProgressView().scaleEffect(2).padding(40)
                             }
-                        }
+                        }.frame(width: 150, height: 150)
                         Spacer()
                         Text(friend.name)
                             .fontWeight(.black)

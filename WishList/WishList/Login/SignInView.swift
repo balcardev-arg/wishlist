@@ -39,6 +39,7 @@ struct SignInView: View {
                     .background(Color.black.opacity(0.05))
                     .frame(width: 380)
                     .textInputAutocapitalization(.never)
+                    .keyboardType(.emailAddress)
                 
                 Text("Password")
                     .frame(maxWidth: .infinity, alignment: .leading)

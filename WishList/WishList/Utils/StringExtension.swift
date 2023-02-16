@@ -24,6 +24,7 @@ extension String {
         let urlRegex = "^(https?://)?(www\\.)?([-a-z0-9]{1,63}\\.)*?[a-z0-9][-a-z0-9]{0,61}[a-z0-9]\\.[a-z]{2,6}(/[-\\w@\\+\\.~#\\?&/=%]*)?$"
         let test = NSPredicate(format:"SELF MATCHES %@", urlRegex)
         let result = test.evaluate(with: self)
+        print("is valid url \(result)")
         return result
     }
 }

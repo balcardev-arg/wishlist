@@ -17,12 +17,20 @@ struct MyBoardView: View {
     @State private var showingErrorAlert = false
     @State private var errorMessage: String = ""
     
+    
     var body: some View {
         
         NavigationView {
             ZStack {
                 List(items) { item in
                     ItemCell(items: $items, item: item)
+                        .swipeActions {
+                            Button(action: {
+                                delete(item: item)
+                            }) {
+                                Image(systemName: "trash.fill")
+                            }.tint(.red)
+                        }
                 }.overlay(alignment: .center){
                     if items.count == 0 {
                         Text("There are not items yet. \n Add items to start a wish list")
@@ -77,6 +85,25 @@ struct MyBoardView: View {
                 return
             }
             self.items = items
+        }
+    }
+    
+    private func delete(item: Item) {
+        let userDictionary = [
+            "id": item.id,
+            "userId": CredentialsManager().userId()
+        ]
+        let request = NetworkManager().createRequest(resource: "/items", method: "DELETE", parameters: userDictionary)
+        isLoading = true
+        
+        NetworkManager().executeRequest(request: request) { (data, error) in
+            isLoading = false
+            if let error = error {
+                errorMessage = error
+                showingErrorAlert = true
+                return
+            }
+            items = items.filter{$0 != item}
         }
     }
 }
