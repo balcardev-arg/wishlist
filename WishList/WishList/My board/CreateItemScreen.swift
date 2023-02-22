@@ -31,11 +31,18 @@ struct CreateItemScreen: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             
-            TextField("Insert URL", text : $url)
-                .padding()
-                .background(Color.black.opacity(0.05))
-                .frame(width: 375)
-                .textInputAutocapitalization(.never)
+            TextField("Insert URL", text : $url, onEditingChanged: {_ in
+                if(!url.isValidUrl()) { return }
+                getMetaData(urlString: url)
+            }).padding()
+            .background(Color.black.opacity(0.05))
+            .frame(width: 375)
+            .textInputAutocapitalization(.never)
+            .keyboardType(.URL)
+            .onSubmit {
+                if(!url.isValidUrl()) { return }
+                getMetaData(urlString: url)
+            }
             
             Text("Description")
                 .fontWeight(.bold)
@@ -81,9 +88,6 @@ struct CreateItemScreen: View {
             if isCreatingItem {
                 ModalProgressView()
             }
-        }
-        .onChange(of: url) { value in
-            getMetaData(urlString: url)
         }.alert(errorMessage, isPresented: $showingErrorAlert){}
     }
     
@@ -97,7 +101,7 @@ struct CreateItemScreen: View {
         }
         metadataProvider.startFetchingMetadata(for: url) { metadata, error in
             guard let metadata = metadata else {
-                errorMessage = Configuration.genericErrorMessage
+                errorMessage = "Invalid URL. Try a different one."
                 showingErrorAlert = true
                 return
             }

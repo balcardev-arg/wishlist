@@ -26,9 +26,9 @@ struct ItemDetailsScreen: View {
                                 .resizable()
                                 .scaledToFit()
                         } else {
-                            ProgressView().scaleEffect(2).frame(height: 300)
+                            ProgressView().scaleEffect(2)
                         }
-                    }
+                    }.frame(height: 300)
                     Text(item.description).padding(30)
                     Spacer(minLength: 100)
                 }
