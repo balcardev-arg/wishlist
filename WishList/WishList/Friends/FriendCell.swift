@@ -22,12 +22,6 @@ struct FriendCell: View {
                             .scaledToFit()
                             .clipShape(Circle())
                             .frame(width: 60, height: 60)
-                    } else if phase.error == nil {
-                        Image(systemName: "person.crop.circle")
-                            .resizable()
-                            .scaledToFit()
-                            .clipShape(Circle())
-                            .frame(width: 60, height: 60)
                     } else {
                         ProgressView()
                     }

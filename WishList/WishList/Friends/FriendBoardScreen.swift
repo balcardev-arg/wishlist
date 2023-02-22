@@ -29,15 +29,8 @@ struct FriendBoardScreen: View {
                                     .frame(width: 150, height: 150)
                                     .clipShape(Circle())
                                     .padding()
-                            } else if phase.error == nil {
-                                Image(systemName: "person.fill")
-                                    .resizable()
-                                    .frame(width: 150,height: 150)
-                                    .background(.gray)
-                                    .clipShape(Circle())
-                                    .padding()
                             } else {
-                                ProgressView()
+                                ProgressView().scaleEffect(2).padding(40)
                             }
                         }
                         Spacer()
